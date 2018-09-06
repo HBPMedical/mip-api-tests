@@ -34,7 +34,6 @@ class ModelContainer extends Container<IModelContainer> {
         model: json,
       });
     } catch (error) {
-      console.log(error);
       return await this.setState({
         error: error.message,
         loading: false,

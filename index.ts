@@ -1,5 +1,6 @@
 import CreateExperiment from './createExperiments';
 
 const createExperiment = new CreateExperiment();
-createExperiment.createModels();
-createExperiment.run()
+createExperiment.checkExistingModels()
+// createExperiment.createModels();
+// createExperiment.run(3)

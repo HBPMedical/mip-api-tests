@@ -8,6 +8,21 @@ import { IExperimentResult, IModelResult } from './types';
 const experimentsToRun = experiments;
 
 export default class {
+  public checkExistingModels = async () => {
+    const modelContainer = new ModelContainer();
+    const fetched = await Promise.all(
+      Object.keys(models).map(async key => {
+        await modelContainer.load(key);
+        return modelContainer.state && modelContainer.state.model;
+      }),
+    );
+
+    const existing = fetched.every(v => v !== undefined);
+    console.log(existing);
+
+    return existing;
+  }
+
   public createModels = async () => {
     const modelContainer = new ModelContainer();
     return await Promise.all(
@@ -43,7 +58,7 @@ export default class {
       }),
     );
   }
-  public run = () => {
+  public run = (every: number) => {
     Promise.all(
       experimentsToRun.map(
         (experiment, i) =>
@@ -79,7 +94,7 @@ export default class {
 
               resolve();
             };
-            setTimeout(run, i * 60 * 1000);
+            setTimeout(run, i * every * 60 * 1000);
           }),
       ),
     );
