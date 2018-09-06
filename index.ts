@@ -1,3 +1,5 @@
-import createExperiment from './createExperiments'
+import CreateExperiment from './createExperiments';
 
-createExperiment()
+const createExperiment = new CreateExperiment();
+createExperiment.createModels();
+createExperiment.run()

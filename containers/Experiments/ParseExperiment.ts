@@ -59,11 +59,8 @@ class ParseExperiment {
 
     const result = parse(experiment.result);
     const nodes: INode[] = [];
-    // const distinctNodeCount = result
-    //   .map((r: any) => r.node)
-    //   .filter((el: any, i: any, a: any) => i === a.indexOf(el)).length;
 
-    result.forEach((r: any, i: number) => {
+    result.forEach((r: any) => {
       const mime = r.type;
 
       let method: IMethod = {
@@ -211,7 +208,7 @@ const pfa = (data: any): IPfa => {
           ? d.cells.validations.init
           : [d.cells.validations.init];
 
-        const buildKFoldValidation = (dta: any, node: any) => ({
+        const buildKFoldValidation = (dta: any) => ({
           explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),
           mae: parseFloat(dta[SCORES.mae.code]),
           mse: parseFloat(dta[SCORES.mse.code]),
@@ -238,13 +235,13 @@ const pfa = (data: any): IPfa => {
             const node = i.node;
             if (i.code === "kfold") {
               const dta: any = i.data.average;
-              output.crossValidation = buildKFoldValidation(dta, node);
+              output.crossValidation = buildKFoldValidation(dta);
             }
 
             if (i.code === "remote-validation") {
               const dta: any = i.data;
               if (dta.type === "RegressionScore") {
-                output.remoteValidations = buildKFoldValidation(dta, node);
+                output.remoteValidations = buildKFoldValidation(dta);
               } else {
                 output.remoteValidations = buildValidation(dta, node);
               }

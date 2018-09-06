@@ -1,50 +1,87 @@
-import { ExperimentContainer } from './containers'
-import { experiments, models } from "./tests/mocks";
-import { IExperimentResult } from './types'
+import { ExperimentContainer, ModelContainer } from './containers';
+import { experiments, models } from './tests/mocks';
+import { IExperimentResult, IModelResult } from './types';
 
-var Promise = require('promise');
-const experimentsUUID: string[] = [];
-const r = Math.floor(Math.random() * Math.floor(experiments.length));
+// const experimentsUUID: string[] = [];
+// const r = Math.floor(Math.random() * Math.floor(experiments.length));
 // const r = experiments.length;
-const experimentsToRun = experiments.slice(r, r + 2);
+const experimentsToRun = experiments;
 
-export default () =>
-  Promise.all(
-    experimentsToRun.map(
-      (experiment, i) =>
-        new Promise((resolve: any) => {
-          const run = () => {
-            console.log('THEN');
-            const experimentContainer = new ExperimentContainer();
-            /* tslint:disable */
-            const model = Object.keys(models).find(
-              (key: string) => (models[key]) === experiment.model,
-            );
-            /* tslint:enable */
-            const exp = {
-              algorithms: experiment.methods.map(m => ({
-                code: m.code,
-                name: m.code,
-                parameters: m.parameters,
-                validation: experiment.validations.length ? true : false,
-              })),
-              model,
-              name: experiment.name,
-              validations: experiment.validations,
+export default class {
+  public createModels = async () => {
+    const modelContainer = new ModelContainer();
+    return await Promise.all(
+      Object.keys(models).map(async key => {
+        await modelContainer.load(key);
+        let result: IModelResult | undefined = modelContainer.state.model;
+        if (result === undefined) {
+          await modelContainer.create({
+            config: {
+              hasXAxis: true,
+              height: 480,
+              title: {
+                text: key,
+              },
+              type: 'designmatrix',
+              xAxisVariable: null,
+              yAxisVariables: ['apoe4'],
+            },
+            dataset: {
+              code: 'DS1528208604241',
+              date: 1533814206000,
+              grouping: [],
+              header: models[key].coVariables.map((v: any) => v.code),
+              variable: models[key].variables.map((v: any) => v.code),
+            },
+            query: models[key],
+          });
+          result = modelContainer.state.model;
+          console.log('created: ', key);
+        } else {
+          console.log('existing: ', key);
+        }
+      }),
+    );
+  }
+  public run = () => {
+    Promise.all(
+      experimentsToRun.map(
+        (experiment, i) =>
+          new Promise((resolve: any) => {
+            const run = async () => {
+              const experimentContainer = new ExperimentContainer();
+              /* tslint:disable */
+              const model = Object.keys(models).find(
+                (key: string) => models[key] === experiment.model
+              );
+              /* tslint:enable */
+              const exp = {
+                algorithms: experiment.methods.map(m => ({
+                  code: m.code,
+                  name: m.code,
+                  parameters: m.parameters,
+                  validation: experiment.validations.length ? true : false,
+                })),
+                model,
+                name: experiment.name,
+                validations: experiment.validations,
+              };
+              experimentContainer.create(exp);
+
+              const result:
+                | IExperimentResult
+                | undefined = await experimentContainer.state.experiment;
+
+              // expect(result!.model).toBeDefined();
+              console.log('created', exp.name, result);
+
+              // experimentsUUID.push(result!.uuid);
+
+              resolve();
             };
-            experimentContainer.create(exp);
-
-            const result: IExperimentResult | undefined =
-              experimentContainer.state.experiment;
-
-            // expect(result!.model).toBeDefined();
-            console.log('created', exp.name);
-
-            experimentsUUID.push(result!.uuid);
-
-            resolve();
-          };
-          setTimeout(run, 3);
-        }),
-    ),
-  );
+            setTimeout(run, i * 60 * 1000);
+          }),
+      ),
+    );
+  }
+}

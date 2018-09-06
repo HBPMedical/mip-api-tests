@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-
 dotenv.config();
 
 const trainingDatasetsValue = process.env.REACT_APP_TRAININGDATASETS;
@@ -12,7 +11,7 @@ const validationDatasets: string[] = validationDatasetsValue
   : [];
 const Cookie = process.env.REACT_APP_COOKIE;
 
-export const config: RequestInit =
+export const config: any =
   process.env.NODE_ENV === 'production'
     ? {
       credentials: 'same-origin',
@@ -41,6 +40,7 @@ interface IModelSample {
 }
 
 interface INamedSamples {
+  [key: string]: IModelSample;
   classification: IModelSample;
   classification2: IModelSample;
   regression0: IModelSample;
