@@ -1,6 +1,10 @@
-import CreateExperiment from './createExperiments';
+import MIP from './MIP';
 
-const createExperiment = new CreateExperiment();
-createExperiment.checkExistingModels()
-// createExperiment.createModels();
-// createExperiment.run(3)
+(async mip => {
+  let modelsCreated: boolean = false;
+  do {
+    modelsCreated = await mip.createModels();
+  } while (!modelsCreated);
+
+  await mip.run(3);
+})(new MIP());
