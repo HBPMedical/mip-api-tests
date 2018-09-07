@@ -29,7 +29,7 @@ export const config: any =
 interface ICode {
   code: string;
 }
-interface IModelSample {
+export interface IModelSample {
   coVariables: ICode[];
   filters: string;
   groupings: ICode[];
@@ -39,7 +39,7 @@ interface IModelSample {
   variables: ICode[];
 }
 
-interface INamedSamples {
+export interface INamedSamples {
   [key: string]: IModelSample;
   classification: IModelSample;
   classification2: IModelSample;

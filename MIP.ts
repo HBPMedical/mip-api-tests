@@ -45,66 +45,68 @@ export default class {
     return results.every(v => v !== undefined);
   }
 
-  public run = (every: number) => {
-      Promise.all(
-      experimentsToRun.map(
-        (experiment, i) =>
-          new Promise((resolve: any) => {
-            const run = async () => {
-              const experimentContainer = new ExperimentContainer();
-              /* tslint:disable */
-              const model = Object.keys(models).find(
-                (key: string) => models[key] === experiment.model
-              );
-              /* tslint:enable */
-              const exp = {
-                algorithms: experiment.methods.map(m => ({
-                  code: m.code,
-                  name: m.code,
-                  parameters: m.parameters,
-                  validation: experiment.validations.length ? true : false,
-                })),
-                model,
-                name: experiment.name,
-                validations: experiment.validations,
-              };
-              await experimentContainer.create(exp);
+  public runOne = async (experiment: any, model: any) => {
+    return new Promise(async resolve => {
+      const experimentContainer = new ExperimentContainer();
 
-              const created: IExperimentResult | undefined =
-                experimentContainer.state.experiment;
-              const uuid = created && created.uuid;
-              console.log('created', exp.name, uuid);
+      const exp = {
+        algorithms: experiment.methods.map((m: any) => ({
+          code: m.code,
+          name: m.code,
+          parameters: m.parameters,
+          validation: experiment.validations.length ? true : false,
+        })),
+        model,
+        name: experiment.name,
+        validations: experiment.validations,
+      };
+      await experimentContainer.create(exp);
 
-              if (uuid) {
-                const loadExperiment = async () => {
-                  await experimentContainer.load(uuid);
-                  const state = experimentContainer.state;
-                  const experiment: IExperimentResult | undefined =
-                    state.experiment;
+      const created: IExperimentResult | undefined =
+        experimentContainer.state.experiment;
+      const uuid = created && created.uuid;
+      console.log('created', exp.name, uuid);
 
-                  const nodes = experiment && experiment.nodes;
-                  const error =
-                    (state && state.error) || (experiment && experiment.error);
-                  const loading = !nodes && !error;
+      if (uuid) {
+        const loadExperiment = async () => {
+          await experimentContainer.load(uuid);
+          const state = experimentContainer.state;
+          const experiment: IExperimentResult | undefined = state.experiment;
 
-                  return loading;
-                };
+          const nodes = experiment && experiment.nodes;
+          const error =
+            (state && state.error) || (experiment && experiment.error);
+          const loading = !nodes && !error;
 
-                
-                const timerId = setInterval(async () => {
-                  const loading = await loadExperiment()
-                  console.log({ loading })
-                  if (!loading) {
-                    clearInterval(timerId);
-                  }
-                }, 10 * 1000);
-                
-              }
-              resolve();
-            };
-            setTimeout(run, i * every * 60 * 1000);
-          }),
-      ),
-    );
+          return loading;
+        };
+
+        const timerId = setInterval(async () => {
+          const loading = await loadExperiment();
+          console.log({ loading });
+          if (!loading) {
+            clearInterval(timerId);
+            resolve(true);
+          }
+        },                          10 * 1000);
+      }
+    });
+  }
+
+  public runAll = async () => {
+    let experimentCreated: any;
+    let experiment = experimentsToRun.shift();
+    do {
+      const model = Object.keys(models).find(
+        (key: string) => models[key] === experiment!.model
+      );
+      experimentCreated = await this.runOne(experiment, model);
+      
+      if (experimentCreated) {
+        experiment = experimentsToRun.shift();
+      }
+    } while (experimentCreated && experiment);
+
+    return Promise.resolve()
   }
 }

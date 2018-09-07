@@ -6,5 +6,6 @@ import MIP from './MIP';
     modelsCreated = await mip.createModels();
   } while (!modelsCreated);
 
-  await mip.run(3);
+  await mip.runAll();
+  console.log("That's all folks")
 })(new MIP());
