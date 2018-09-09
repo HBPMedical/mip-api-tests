@@ -2,7 +2,7 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { config } from "../../tests/mocks";
+import { config } from "../../src/mocks";
 import { IExperimentContainer } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 
@@ -31,7 +31,6 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         experiment,
       });
     } catch (error) {
-      console.log({ error });
       return await this.setState({
         error: error.message,
       });
@@ -56,7 +55,6 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         experiment,
       });
     } catch (error) {
-      console.log(error);
       return await this.setState({
         error: error.message,
       });

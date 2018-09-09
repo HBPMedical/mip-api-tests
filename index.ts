@@ -1,11 +1,10 @@
-import MIP from './MIP';
+import MIP from './src/MIP';
+import { experiments, models } from "./src/mocks";
 
 (async mip => {
-  let modelsCreated: boolean = false;
-  do {
-    modelsCreated = await mip.createModels();
-  } while (!modelsCreated);
-
-  await mip.runAll();
-  console.log("That's all folks")
+  console.log("Generating models & experiments through the HBP MIP api");
+  await mip.createModels(models);
+  await mip.runExperiments(experiments, models);
+  console.log("That's all folks");
+  process.exit(0);
 })(new MIP());

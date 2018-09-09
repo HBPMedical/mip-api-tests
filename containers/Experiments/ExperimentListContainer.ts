@@ -3,7 +3,7 @@ import { IExperimentResult, IExperimentListContainer} from ".../../../types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { config } from "../../tests/mocks";
+import { config } from "../../src/mocks";
 import ParseExperiment from "./ParseExperiment";
 dotenv.config();
 
