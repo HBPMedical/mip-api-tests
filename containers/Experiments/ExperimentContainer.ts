@@ -14,7 +14,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     experiment: undefined,
   };
 
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
+  private baseUrl = `${process.env.BACKEND_URL}/experiments`;
 
   public load = async (uuid: string) => {
     try {

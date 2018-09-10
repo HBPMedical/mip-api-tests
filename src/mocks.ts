@@ -1,15 +1,15 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const trainingDatasetsValue = process.env.REACT_APP_TRAININGDATASETS;
+const trainingDatasetsValue = process.env.TRAININGDATASETS;
 const trainingDatasets = trainingDatasetsValue
   ? trainingDatasetsValue.split(",")
   : [];
-const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
+const validationDatasetsValue = process.env.VALIDATIONDATASETS;
 const validationDatasets: string[] = validationDatasetsValue
   ? validationDatasetsValue.split(",")
   : [];
-const Cookie = process.env.REACT_APP_COOKIE;
+const Cookie = process.env.COOKIE;
 
 export const config: any =
   process.env.NODE_ENV === "production"
@@ -19,7 +19,7 @@ export const config: any =
     : Cookie
       ? {
           headers: {
-            Authorization: process.env.REACT_APP_AUTHORIZATION!,
+            Authorization: process.env.AUTHORIZATION!,
             Cookie,
             "X-XSRF-TOKEN": Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
           }

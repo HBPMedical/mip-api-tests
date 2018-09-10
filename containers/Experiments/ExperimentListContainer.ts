@@ -13,7 +13,7 @@ export interface IResult {
 }
 
 class ExperimentListContainer extends Container<IExperimentListContainer> {
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
+  private baseUrl = `${process.env.BACKEND_URL}/experiments`;
 
   constructor() {
     super();

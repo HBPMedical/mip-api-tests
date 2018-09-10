@@ -77,7 +77,7 @@ export default class {
   private runAndWaitExperiment = async (
     experiment: any,
     model: any
-  ) => {
+  ): Promise<boolean | any> => {
     return new Promise(async resolve => {
       const exp = {
         algorithms: experiment.methods.map((m: any) => ({
@@ -103,7 +103,7 @@ export default class {
           console.log({ loading });
           if (!loading) {
             clearInterval(timerId);
-            resolve(uuid);
+            resolve(true);
           }
         }, 10 * 1000);
       }

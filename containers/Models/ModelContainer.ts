@@ -14,7 +14,7 @@ class ModelContainer extends Container<IModelContainer> {
     model: undefined,
   };
 
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/models`;
+  private baseUrl = `${process.env.BACKEND_URL}/models`;
 
   public load = async (slug: string) => {
     await this.setState({ loading: true });
