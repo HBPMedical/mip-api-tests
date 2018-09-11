@@ -8,10 +8,16 @@ AUTHORIZATION = "Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex"
 BACKEND_URL = "http://frontend/services"
 TRAININGDATASETS = "desd-synthdata"
 # enable this if the MIP is in distributed mode
-# VALIDATIONDATASETS = "qqni-synthdata"
+# VALIDATIONDATASETS = "qqni-synthdata,nida-synthdata"
 ```
+### Docker version
+`docker build -t hbpmip/mipapitest .`
 
-### install build and run
+`ip addr | grep docker` to find your local docker ip
+
+`docker run --name mipapitest--add-host="frontend:docker-ip" hbpmip/mipapitest`
+
+### Install, build and run
 see [pre-built installer for your platform](https://nodejs.org/en/download/)
 
 #### install node
