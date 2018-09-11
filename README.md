@@ -18,12 +18,8 @@ TRAININGDATASETS = "desd-synthdata"
 `docker run --name mipapitest--add-host="frontend:docker-ip" hbpmip/mipapitest`
 
 ### Install, build and run
-see [pre-built installer for your platform](https://nodejs.org/en/download/)
-
 #### install node
-`npm install -g typescript`
-or 
-`yarn global add typescript`
+see [pre-built installer for your platform](https://nodejs.org/en/download/)
 
 #### install typescript
 `npm install -g typescript`
