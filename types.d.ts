@@ -101,5 +101,4 @@ export interface IExperimentContainer {
 export interface IModelContainer {
   error?: string;
   model?: IModelResult;
-  loading: boolean;
 }

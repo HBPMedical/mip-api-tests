@@ -34,10 +34,15 @@ export default class {
               query: models[key]
             });
             result = modelContainer.state.model;
-            console.log("created: ", key);
-          } else {
-            console.log("existing: ", key);
           }
+
+          const error: string | undefined = modelContainer.state.error;
+          if (error && error.match(/ECONNREFUSED/)) {
+            console.log({ error });
+            process.exit(1);
+          }
+
+          console.log({ result });
 
           return result;
         })
@@ -65,13 +70,13 @@ export default class {
         (key: string) => models[key] === experiment!.model
       );
       experimentCreated = await this.runAndWaitExperiment(experiment, model);
-      
+
       if (experimentCreated) {
         experiment = experiments.shift();
       }
     } while (experimentCreated && experiment);
 
-    return Promise.resolve()
+    return Promise.resolve();
   };
 
   private runAndWaitExperiment = async (
@@ -96,6 +101,12 @@ export default class {
         experimentContainer.state.experiment;
       const uuid: string | undefined = created && created.uuid;
       console.log("created", exp.name, uuid);
+
+      const error: string | undefined = experimentContainer.state.error;
+      if (error && error.match(/ECONNREFUSED/)) {
+        console.log({ error });
+        process.exit(1);
+      }
 
       if (uuid) {
         const timerId = setInterval(async () => {
