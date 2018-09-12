@@ -11,6 +11,8 @@ TRAININGDATASETS = "desd-synthdata"
 # VALIDATIONDATASETS = "qqni-synthdata,nida-synthdata"
 ```
 ### Docker version
+either run th `./run.sh` script or manually build and run: 
+
 `docker build -t hbpmip/mipapitest .`
 
 `ip addr | grep docker` to find your local docker ip
