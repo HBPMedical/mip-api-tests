@@ -1,6 +1,11 @@
-import { ExperimentContainer, ModelContainer } from "../containers";
-import { IExperimentResult, IModelResult } from "../types";
-import { IExperiment, IModelSamples } from "./mocks";
+import {
+  ExperimentContainer,
+  ExperimentListContainer,
+  ModelContainer,
+} from '../containers';
+import { IExperimentResult, IModelResult, INode } from '../types';
+import { IExperiment, IModelSamples } from './mocks';
+import assert from 'assert';
 
 const experimentContainer = new ExperimentContainer();
 
@@ -18,20 +23,20 @@ export default class {
                 hasXAxis: true,
                 height: 480,
                 title: {
-                  text: key
+                  text: key,
                 },
-                type: "designmatrix",
+                type: 'designmatrix',
                 xAxisVariable: null,
-                yAxisVariables: ["apoe4"]
+                yAxisVariables: ['apoe4'],
               },
               dataset: {
-                code: "DS1528208604241",
+                code: 'DS1528208604241',
                 date: 1533814206000,
                 grouping: [],
                 header: models[key].coVariables.map((v: any) => v.code),
-                variable: models[key].variables.map((v: any) => v.code)
+                variable: models[key].variables.map((v: any) => v.code),
               },
-              query: models[key]
+              query: models[key],
             });
             result = modelContainer.state.model;
           }
@@ -45,7 +50,7 @@ export default class {
           console.log({ result });
 
           return result;
-        })
+        }),
       );
 
       return results.every(v => v !== undefined);
@@ -57,17 +62,17 @@ export default class {
     } while (!modelsCreated);
 
     return Promise.resolve(true);
-  };
+  }
 
   public runExperiments = async (
     experiments: IExperiment[],
-    models: IModelSamples
+    models: IModelSamples,
   ): Promise<any> => {
     let experimentCreated: any;
     let experiment = experiments.shift();
     do {
       const model = Object.keys(models).find(
-        (key: string) => models[key] === experiment!.model
+        (key: string) => models[key] === experiment!.model,
       );
       experimentCreated = await this.runAndWaitExperiment(experiment, model);
 
@@ -77,11 +82,11 @@ export default class {
     } while (experimentCreated && experiment);
 
     return Promise.resolve();
-  };
+  }
 
   private runAndWaitExperiment = async (
     experiment: any,
-    model: any
+    model: any,
   ): Promise<boolean | any> => {
     return new Promise(async resolve => {
       const exp = {
@@ -89,18 +94,18 @@ export default class {
           code: m.code,
           name: m.code,
           parameters: m.parameters,
-          validation: experiment.validations.length ? true : false
+          validation: experiment.validations.length ? true : false,
         })),
         model,
         name: experiment.name,
-        validations: experiment.validations
+        validations: experiment.validations,
       };
       await experimentContainer.create(exp);
 
       const created: IExperimentResult | undefined =
         experimentContainer.state.experiment;
       const uuid: string | undefined = created && created.uuid;
-      console.log("created", exp.name, uuid);
+      console.log('created', exp.name, uuid);
 
       const error: string | undefined = experimentContainer.state.error;
       if (error && error.match(/ECONNREFUSED/)) {
@@ -116,10 +121,52 @@ export default class {
             clearInterval(timerId);
             resolve(true);
           }
-        }, 10 * 1000);
+        },                          10 * 1000);
       }
     });
-  };
+  }
+
+  public testExperimentsResults = async () => {
+    const experimentListContainer = new ExperimentListContainer();
+    await experimentListContainer.load();
+    const experiments: IExperimentResult[] | undefined =
+      experimentListContainer.state.experiments;
+
+    let current: any = {};
+    try {
+      assert(experiments);
+      experiments &&
+        experiments.forEach((experiment: IExperimentResult) => {
+          current = experiment;
+          assert(experiment.created, `experiment.created `);
+          assert(experiment.name, `experiment.created `);
+          assert.notEqual(
+            experiment.resultsViewed,
+            `experiment.resultsViewed `,
+          );
+          assert(experiment.uuid, `experiment.uuid `);
+          assert(experiment.modelDefinitionId, `experiment.modelDefinitionId `);
+          assert(experiment.user, `experiment.user `);
+          assert(experiment.algorithms, `experiment.algorithms `);
+
+          if (experiment.nodes) {
+            const nodes: INode[] = experiment.nodes;
+            nodes.forEach(node => {
+              assert(node.name, `node.name `);
+              assert(node.methods, `node.methods `);
+
+              node.methods.forEach(method => {
+                assert(method.mime, `method.mime `);
+                assert(method.algorithm, `method.algorithm `);
+                assert(method.data || method.error, `method.data `);
+              });
+            });
+          }
+        });
+    } catch (e) {
+      console.log(e, JSON.stringify(current, null, 2));
+    }
+  }
 
   private experimentLoadingStatus = async (uuid: string): Promise<boolean> => {
     await experimentContainer.load(uuid);
@@ -131,5 +178,5 @@ export default class {
     const loading = !nodes && !error;
 
     return loading;
-  };
+  }
 }
