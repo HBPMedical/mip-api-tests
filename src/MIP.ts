@@ -6,6 +6,7 @@ import {
 import { IExperimentResult, IModelResult, INode } from '../types';
 import { IExperiment, IModelSamples } from './mocks';
 import assert from 'assert';
+import tape from 'tape';
 
 const experimentContainer = new ExperimentContainer();
 
@@ -41,7 +42,7 @@ export default class {
             result = modelContainer.state.model;
           }
 
-          this.checkForError(modelContainer.state.error);
+          this.hasNetworkError(modelContainer.state.error);
           if (result) {
             console.log(
               `Model ${result.slug}: ${JSON.stringify(result.query)} `,
@@ -90,7 +91,7 @@ export default class {
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
 
-    this.checkForError(experimentListContainer.state.error);
+    this.hasNetworkError(experimentListContainer.state.error);
 
     if (experiments) {
       let experiment = experiments.shift();
@@ -109,18 +110,29 @@ export default class {
     // return Promise.reject();
   }
 
-  public testExperimentListResults = async () => {
+  public testExperimentListResults = async (t: tape.Test) => {
     console.log('\n--- Testing Experiment List Results');
     const experimentListContainer = new ExperimentListContainer();
     await experimentListContainer.load();
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
 
-    this.checkForError(experimentListContainer.state.error);
-    experiments &&
-      experiments.forEach((experiment: IExperimentResult) => {
-        this.testExperiment(experiment);
-      });
+    t.error(
+      this.hasNetworkError(experimentListContainer.state.error),
+      'No network error',
+    );
+
+    t.ok(experiments, 'Experiments response from server');
+
+    if (experiments) {
+      return Promise.all(
+        experiments.map((experiment: IExperimentResult) =>
+          this.testExperiment(experiment),
+        ),
+      );
+    }
+
+    return false;
   }
 
   private testExperiment = (experiment: IExperimentResult): boolean => {
@@ -145,8 +157,10 @@ export default class {
             assert(method.data || method.error, `method.data`);
           });
         });
+      } else {
+        assert(experiment.error, 'experiment.error');
       }
-      console.log(`${experiment.name}, ${experiment.modelDefinitionId}: OK`);
+      console.log(`${experiment.name}, ${experiment.modelDefinitionId}: OK`, experiment.error);
 
       return true;
     } catch (e) {
@@ -160,14 +174,16 @@ export default class {
     }
   }
 
-  private checkForError = (error: string | undefined) => {
+  private hasNetworkError = (error: string | undefined): boolean => {
     if (
       (error && error.match(/ECONNREFUSED/)) ||
       (error && error.match(/Forbidden/))
     ) {
       console.log({ error });
-      process.exit(1);
+      return true;
     }
+
+    return false;
   }
 
   private runAndWaitExperiment = async (
@@ -193,7 +209,7 @@ export default class {
       const uuid: string | undefined = created && created.uuid;
       console.log('created', exp.name, uuid);
 
-      this.checkForError(experimentContainer.state.error);
+      this.hasNetworkError(experimentContainer.state.error);
 
       if (uuid) {
         const timerId = setInterval(async () => {

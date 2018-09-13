@@ -11,11 +11,13 @@
   "dependencies": {
     "@types/dotenv": "^4.0.3",
     "@types/react": "^16.4.13",
-    "@types/request-promise-native": "^1.0.15",
     "@types/request": "^2.47.1",
+    "@types/request-promise-native": "^1.0.15",
+    "@types/tape": "^4.2.32",
     "dotenv": "^6.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
+    "tape": "^4.9.1",
     "ts-node": "^7.0.1",
     "tslint-config-airbnb": "^5.11.0",
     "unstated": "^2.1.1"
