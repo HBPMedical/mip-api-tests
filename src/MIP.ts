@@ -41,13 +41,12 @@ export default class {
             result = modelContainer.state.model;
           }
 
-          const error: string | undefined = modelContainer.state.error;
-          if (error && error.match(/ECONNREFUSED/)) {
-            console.log({ error });
-            process.exit(1);
+          this.checkForError(modelContainer.state.error);
+          if (result) {
+            console.log(
+              `Model ${result.slug}: ${JSON.stringify(result.query)} `,
+            );
           }
-
-          console.log({ result });
 
           return result;
         }),
@@ -84,6 +83,93 @@ export default class {
     return Promise.resolve();
   }
 
+  public testEachExperimentResult = async (): Promise<any> => {
+    console.log('\n--- Testing Each Experiment Result');
+    const experimentListContainer = new ExperimentListContainer();
+    await experimentListContainer.load();
+    const experiments: IExperimentResult[] | undefined =
+      experimentListContainer.state.experiments;
+
+    this.checkForError(experimentListContainer.state.error);
+
+    if (experiments) {
+      let experiment = experiments.shift();
+      if (experiment) {
+        do {
+          await experimentContainer.load(experiment.uuid);
+          const theExperiment = experimentContainer.state.experiment;
+          if (theExperiment) {
+            this.testExperiment(theExperiment);
+          }
+          experiment = experiments.shift();
+        } while (experiment);
+      }
+    }
+    // console.log("FAILLLLLLLLLED")
+    // return Promise.reject();
+  }
+
+  public testExperimentListResults = async () => {
+    console.log('\n--- Testing Experiment List Results');
+    const experimentListContainer = new ExperimentListContainer();
+    await experimentListContainer.load();
+    const experiments: IExperimentResult[] | undefined =
+      experimentListContainer.state.experiments;
+
+    this.checkForError(experimentListContainer.state.error);
+    experiments &&
+      experiments.forEach((experiment: IExperimentResult) => {
+        this.testExperiment(experiment);
+      });
+  }
+
+  private testExperiment = (experiment: IExperimentResult): boolean => {
+    try {
+      assert(experiment.created, `experiment.created`);
+      assert(experiment.name, `experiment.created`);
+      assert.notEqual(experiment.resultsViewed, `experiment.resultsViewed`);
+      assert(experiment.uuid, `experiment.uuid`);
+      assert(experiment.modelDefinitionId, `experiment.modelDefinitionId`);
+      assert(experiment.user, `experiment.user`);
+      assert(experiment.algorithms, `experiment.algorithms`);
+
+      if (experiment.nodes) {
+        const nodes: INode[] = experiment.nodes;
+        nodes.forEach(node => {
+          assert(node.name, `node.name`);
+          assert(node.methods, `node.methods`);
+
+          node.methods.forEach(method => {
+            assert(method.mime, `method.mime`);
+            assert(method.algorithm, `method.algorithm`);
+            assert(method.data || method.error, `method.data`);
+          });
+        });
+      }
+      console.log(`${experiment.name}, ${experiment.modelDefinitionId}: OK`);
+
+      return true;
+    } catch (e) {
+      console.log(
+        `${experiment.name} ${experiment.modelDefinitionId}: KO`,
+        e,
+        JSON.stringify(experiment, null, 2),
+      );
+
+      return false;
+    }
+  }
+
+  private checkForError = (error: string | undefined) => {
+    if (
+      (error && error.match(/ECONNREFUSED/)) ||
+      (error && error.match(/Forbidden/))
+    ) {
+      console.log({ error });
+      process.exit(1);
+    }
+  }
+
   private runAndWaitExperiment = async (
     experiment: any,
     model: any,
@@ -107,11 +193,7 @@ export default class {
       const uuid: string | undefined = created && created.uuid;
       console.log('created', exp.name, uuid);
 
-      const error: string | undefined = experimentContainer.state.error;
-      if (error && error.match(/ECONNREFUSED/)) {
-        console.log({ error });
-        process.exit(1);
-      }
+      this.checkForError(experimentContainer.state.error);
 
       if (uuid) {
         const timerId = setInterval(async () => {
@@ -124,48 +206,6 @@ export default class {
         },                          10 * 1000);
       }
     });
-  }
-
-  public testExperimentsResults = async () => {
-    const experimentListContainer = new ExperimentListContainer();
-    await experimentListContainer.load();
-    const experiments: IExperimentResult[] | undefined =
-      experimentListContainer.state.experiments;
-
-    let current: any = {};
-    try {
-      assert(experiments);
-      experiments &&
-        experiments.forEach((experiment: IExperimentResult) => {
-          current = experiment;
-          assert(experiment.created, `experiment.created `);
-          assert(experiment.name, `experiment.created `);
-          assert.notEqual(
-            experiment.resultsViewed,
-            `experiment.resultsViewed `,
-          );
-          assert(experiment.uuid, `experiment.uuid `);
-          assert(experiment.modelDefinitionId, `experiment.modelDefinitionId `);
-          assert(experiment.user, `experiment.user `);
-          assert(experiment.algorithms, `experiment.algorithms `);
-
-          if (experiment.nodes) {
-            const nodes: INode[] = experiment.nodes;
-            nodes.forEach(node => {
-              assert(node.name, `node.name `);
-              assert(node.methods, `node.methods `);
-
-              node.methods.forEach(method => {
-                assert(method.mime, `method.mime `);
-                assert(method.algorithm, `method.algorithm `);
-                assert(method.data || method.error, `method.data `);
-              });
-            });
-          }
-        });
-    } catch (e) {
-      console.log(e, JSON.stringify(current, null, 2));
-    }
   }
 
   private experimentLoadingStatus = async (uuid: string): Promise<boolean> => {
