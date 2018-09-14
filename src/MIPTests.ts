@@ -81,6 +81,7 @@ export default class {
   }
 
   public runExperiments = async (
+    t: tape.Test,
     experiments: IExperiment[],
     models: IModelSamples,
   ): Promise<any> => {
@@ -93,6 +94,7 @@ export default class {
       experimentCreated = await this.runAndWaitExperiment(experiment, model);
 
       if (experimentCreated) {
+        this.testExperiment(experimentCreated, sourceType.item, t);
         experiment = experiments.shift();
       }
     } while (experimentCreated && experiment);
@@ -177,8 +179,8 @@ export default class {
     t.comment(`--- name: ${experiment.name}`);
 
     from === sourceType.item
-              ? this.methodEachCount += experiment.algorithms.length
-              : this.methodListCount += experiment.algorithms.length;
+      ? (this.methodEachCount += experiment.algorithms.length)
+      : (this.methodListCount += experiment.algorithms.length);
 
     t.ok(
       experiment.algorithms.every((a: any) => a),
@@ -256,21 +258,37 @@ export default class {
                         );
 
                         if (data.crossValidation) {
-                          t.ok(Object.keys(data.crossValidation), `crossValidation keys: ${Object.keys(data.crossValidation)}`);
+                          t.ok(
+                            Object.keys(data.crossValidation),
+                            `crossValidation keys: ${Object.keys(
+                              data.crossValidation,
+                            )}`,
+                          );
                           if (data.crossValidation.confusionMatrix) {
                             t.ok(
                               Object.keys(data.crossValidation.confusionMatrix),
-                              `confusionMatrix keys: ${Object.keys(data.crossValidation.confusionMatrix)}`
+                              `confusionMatrix keys: ${Object.keys(
+                                data.crossValidation.confusionMatrix,
+                              )}`,
                             );
                           }
                         }
 
                         if (data.remoteValidation) {
-                          t.ok(Object.keys(data.remoteValidation), `remoteValidation keys: ${Object.keys(data.remoteValidation)}`);
+                          t.ok(
+                            Object.keys(data.remoteValidation),
+                            `remoteValidation keys: ${Object.keys(
+                              data.remoteValidation,
+                            )}`,
+                          );
                           if (data.remoteValidation.confusionMatrix) {
                             t.ok(
-                              Object.keys(data.remoteValidation.confusionMatrix)
-                              , `confusionMatrix keys: ${Object.keys(data.remoteValidation.confusionMatrix)}`
+                              Object.keys(
+                                data.remoteValidation.confusionMatrix,
+                              ),
+                              `confusionMatrix keys: ${Object.keys(
+                                data.remoteValidation.confusionMatrix,
+                              )}`,
                             );
                           }
                         }
@@ -300,7 +318,7 @@ export default class {
                   break;
 
                 case MIME_TYPES.JSONDATA:
-                  t.fail(MIME_TYPES.JSONDATA);
+                  // t.fail(MIME_TYPES.JSONDATA);
                   break;
 
                 default:
@@ -345,7 +363,7 @@ export default class {
   private runAndWaitExperiment = async (
     experiment: any,
     model: any,
-  ): Promise<boolean | any> => {
+  ): Promise<{ experiment: any } | any> => {
     return new Promise(async resolve => {
       const exp = {
         algorithms: experiment.methods.map((m: any) => ({
@@ -369,18 +387,22 @@ export default class {
 
       if (uuid) {
         const timerId = setInterval(async () => {
-          const loading = await this.experimentLoadingStatus(uuid);
+          const { loading, experiment } = await this.experimentLoadingStatus(
+            uuid,
+          );
           console.log({ loading });
           if (!loading) {
             clearInterval(timerId);
-            resolve(true);
+            resolve({ experiment });
           }
         },                          10 * 1000);
       }
     });
   }
 
-  private experimentLoadingStatus = async (uuid: string): Promise<boolean> => {
+  private experimentLoadingStatus = async (
+    uuid: string,
+  ): Promise<{ loading: boolean; experiment: any }> => {
     await experimentContainer.load(uuid);
     const state = experimentContainer.state;
     const experiment: IExperimentResult | undefined = state.experiment;
@@ -389,6 +411,6 @@ export default class {
     const error = (state && state.error) || (experiment && experiment.error);
     const loading = !nodes && !error;
 
-    return loading;
+    return { loading, experiment };
   }
 }
