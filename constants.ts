@@ -1,28 +1,21 @@
 // Mime types
-const ERROR = 'text/plain+error';
-const HIGHCHARTS = 'application/vnd.highcharts+json';
-const JSON = 'application/json';
-const MIP_PFA = 'application/vnd.hbp.mip.experiment.pfa+json';
-const PFA = 'application/pfa+json';
-const PLOTLY = 'application/vnd.plotly.v1+json';
-const VISJS = 'application/vnd.visjs+javascript';
-
-export const MIME_TYPES = {
-  ERROR,
-  HIGHCHARTS,
-  JSON,
-  MIP_PFA,
-  PFA,
-  PLOTLY,
-  VISJS,
-};
+export enum MIME_TYPES {
+  ERROR = 'text/plain+error',
+  HIGHCHARTS = 'application/vnd.highcharts+json',
+  JSON = 'application/json',
+  MIP_PFA = 'application/vnd.hbp.mip.experiment.pfa+json',
+  PFA = 'application/pfa+json',
+  PLOTLY = 'application/vnd.plotly.v1+json',
+  VISJS = 'application/vnd.visjs+javascript',
+  JSONDATA = "application/vnd.dataresource+json"
+}
 
 interface ILabel {
   code: string;
   label: string;
 }
 
-// aglorithms labels
+// regression && classification scores labels
 const accuracy: ILabel = { code: 'Accuracy', label: 'Accuracy' };
 const f1score: ILabel = {
   code: 'Weighted F1-score',
@@ -80,4 +73,23 @@ const prf: ILabelPlus = { code: 'PR(>F)', label: 'P-value', order: 3 };
 const sumsq: ILabelPlus = { code: 'sum_sq', label: 'Sum²', order: 0 };
 const df: ILabelPlus = { code: 'df', label: 'Degrees of freedom', order: 1 };
 
-export const LABELS: ILabelPlus[] = [df, f, meansq, prf, sumsq];
+const coef: ILabelPlus = { code: 'coef', label: 'Coefficient', order: 0 };
+const pvalues: ILabelPlus = { code: 'p_values', label: 'P-value', order: 3 };
+const stderr: ILabelPlus = {
+  code: 'std_err',
+  label: 'Standard Error',
+  order: 2,
+};
+const tvalues: ILabelPlus = { code: 't_values', label: 'T-value', order: 2 };
+
+export const LABELS: ILabelPlus[] = [
+  coef,
+  df,
+  f,
+  meansq,
+  prf,
+  pvalues,
+  stderr,
+  sumsq,
+  tvalues,
+];

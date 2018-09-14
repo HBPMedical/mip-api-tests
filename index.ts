@@ -1,5 +1,5 @@
-import MIP from './src/MIP';
-// import { experiments, models } from './src/mocks';
+import MIPTest from './src/MIPTests';
+// import { experiments, models } from './src/mocks'; //FIXME: pure functions
 
 import tape from 'tape';
 
@@ -10,10 +10,9 @@ tape('Tests up and running', function (t: tape.Test) {
     // console.log('Generating models & experiments through the HBP MIP api');
     // await mip.createModels(models);
     // await mip.runExperiments(experiments, models);
-    t.ok(await mip.testExperimentListResults(t), 'testExperimentListResults');
-    // await mip.testEachExperimentResult();
-    // console.log('\n\nThat\'s all folks');
-    // process.exit(0);
+    // t.ok(await mip.testExperimentListResults(t), 'testExperimentListResults');
+    t.ok(await mip.testEachExperimentResult(t), 'testEachExperimentResult');
+    console.log('\n\nThat\'s all folks');
     t.end();
-  })(new MIP());
+  })(new MIPTest());
 });

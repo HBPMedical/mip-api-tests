@@ -41,7 +41,7 @@ class ParseExperiment {
     if (!modelDefinitionId) {
       experimentResult = {
         ...experimentResult,
-        modelDefinitionId: "undefined",
+        modelDefinitionId: 'undefined',
         error: 'No model defined',
       };
 
@@ -77,15 +77,6 @@ class ParseExperiment {
     const nodes: INode[] = [];
 
     result.forEach((r: any, i: number) => {
-      // if (r.Error) {
-      //   // EXAREME
-
-      //   return {
-      //     ...experimentResult,
-      //     error: r.Error,
-      //   };
-      // }
-
       const mime = r.type;
       const algorithm =
         experimentResult.algorithms.length - 1 === i
@@ -96,17 +87,11 @@ class ParseExperiment {
         mime,
       };
 
-      // if (!method.mime) {
-      //   console.log('\n\n', experiment, '\n', {
-      //     resultParsed,
-      //     experimentResult,
-      //     r,
-      //     method,
-      //   });
-      //   process.exit(1);
+      if (r.Error) {
+        // EXAREME
+        method.error = r.Error;
+      }
 
-      //   return experimentResult;
-      // }
       // Convert to array to have consistent results
       const normalizedResult = (input: any) =>
         (input.data && (input.data.length ? input.data : [input.data])) || null;
@@ -129,12 +114,13 @@ class ParseExperiment {
           method.data = jsonTest(results);
           break;
 
-        // case "application/vnd.dataresource+json":
-        //   break;
+        case MIME_TYPES.JSONDATA:
+          throw new Error(MIME_TYPES.JSONDATA);
+          break;
 
-        case 'application/vnd.visjs+javascript': // EXAREME
-          method.data = results[0].data.result;
-          method.mime = 'exareme';
+        case MIME_TYPES.VISJS: // EXAREME
+          const visFunction = results[0].data.result.slice(1, -1);
+          method.data = [`<script>var network; ${visFunction}</script>`];
           break;
 
         case MIME_TYPES.ERROR:
@@ -215,7 +201,12 @@ const highcharts = (data: any) => {
   return data;
 };
 
-const plotly = (data: any) => data && data;
+const plotly = (data: any) => {
+  return [{
+    data,
+    layout: { margin: { l: 400 } },
+  }];
+};
 
 interface IPfa {
   crossValidation?:
