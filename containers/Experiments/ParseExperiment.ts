@@ -5,9 +5,9 @@ import {
   IMethod,
   INode,
   IPolynomialClassificationScore,
-  IValidationScore,
-} from '../../types';
-import { MIME_TYPES, SCORES } from '../../constants';
+  IValidationScore
+} from "../../types";
+import { MIME_TYPES, SCORES } from "../../constants";
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
@@ -15,7 +15,7 @@ class ParseExperiment {
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
     const created = (() => {
-      const d = Date.parse(experiment.created + ' GMT');
+      const d = Date.parse(experiment.created + " GMT");
       if (isNaN(d)) {
         return new Date(experiment.created);
       }
@@ -32,17 +32,17 @@ class ParseExperiment {
       resultsViewed: experiment.resultsViewed,
       user: {
         fullname: experiment.createdBy.fullname,
-        username: experiment.createdBy.username,
+        username: experiment.createdBy.username
       },
-      uuid: experiment.uuid,
+      uuid: experiment.uuid
     };
 
     // Errors
     if (!modelDefinitionId) {
       experimentResult = {
         ...experimentResult,
-        modelDefinitionId: 'undefined',
-        error: 'No model defined',
+        modelDefinitionId: "undefined",
+        error: "No model defined"
       };
 
       return experimentResult;
@@ -51,7 +51,7 @@ class ParseExperiment {
     if (experiment.hasServerError) {
       experimentResult = {
         ...experimentResult,
-        error: `${experiment.result}`,
+        error: `${experiment.result}`
       };
 
       return experimentResult;
@@ -64,7 +64,7 @@ class ParseExperiment {
       if (elapsed > 60 * 5) {
         experimentResult = {
           ...experimentResult,
-          error: 'Timeout after 5 mn',
+          error: "Timeout after 5 mn"
         };
       }
 
@@ -84,7 +84,7 @@ class ParseExperiment {
           : experimentResult.algorithms[0];
       let method: IMethod = {
         algorithm: r.algorithm || algorithm,
-        mime,
+        mime
       };
 
       if (r.Error) {
@@ -115,7 +115,7 @@ class ParseExperiment {
           break;
 
         case MIME_TYPES.JSONDATA:
-          throw new Error(MIME_TYPES.JSONDATA);
+          method.data = jsonTest(results);
           break;
 
         case MIME_TYPES.VISJS: // EXAREME
@@ -160,16 +160,16 @@ class ParseExperiment {
                 break;
 
               default:
-                console.log('!!!!!!!! SHOULD TEST', subResult.type);
+                console.log("!!!!!!!! SHOULD TEST", subResult.type);
             }
           });
 
         default:
           method = {
             ...method,
-            algorithm: 'no data',
-            error: 'no data',
-            mime: 'no data',
+            algorithm: "no data",
+            error: "no data",
+            mime: "no data"
           };
       }
 
@@ -184,7 +184,7 @@ class ParseExperiment {
       } else {
         const node: INode = {
           methods: [method],
-          name: r.node || 'Default',
+          name: r.node || "Default"
         };
         nodes.push(node);
       }
@@ -192,7 +192,7 @@ class ParseExperiment {
     experimentResult.nodes = nodes;
 
     return experimentResult;
-  }
+  };
 }
 
 export default ParseExperiment;
@@ -202,10 +202,12 @@ const highcharts = (data: any) => {
 };
 
 const plotly = (data: any) => {
-  return [{
-    data,
-    layout: { margin: { l: 400 } },
-  }];
+  return [
+    {
+      data,
+      layout: { margin: { l: 400 } }
+    }
+  ];
 };
 
 interface IPfa {
@@ -228,7 +230,7 @@ const pfa = (data: any): IPfa => {
   data.forEach((d: any) => {
     if (!d.cells) {
       // output.data.push(d);
-      output.error = 'WARNING, not handled';
+      output.error = "WARNING, not handled";
     } else {
       if (d.cells.validations) {
         // Convert to array to have consistent results
@@ -242,7 +244,7 @@ const pfa = (data: any): IPfa => {
           mse: parseFloat(dta[SCORES.mse.code]),
           rmse: parseFloat(dta[SCORES.rmse.code]),
           rsquared: parseFloat(dta[SCORES.rsquared.code]),
-          type: `${dta[SCORES.type.code]}`,
+          type: `${dta[SCORES.type.code]}`
         });
 
         const buildValidation = (dta: any, node: any) => ({
@@ -252,7 +254,7 @@ const pfa = (data: any): IPfa => {
           falsePositiveRate: parseFloat(dta[SCORES.falsePositiveRate.code]),
           node: `${node}`,
           precision: parseFloat(dta[SCORES.precision.code]),
-          recall: parseFloat(dta[SCORES.recall.code]),
+          recall: parseFloat(dta[SCORES.recall.code])
         });
 
         init.forEach((i: any) => {
@@ -261,14 +263,14 @@ const pfa = (data: any): IPfa => {
             return;
           } else {
             const node = i.node;
-            if (i.code === 'kfold') {
+            if (i.code === "kfold") {
               const dta: any = i.data.average;
               output.crossValidation = buildKFoldValidation(dta);
             }
 
-            if (i.code === 'remote-validation') {
+            if (i.code === "remote-validation") {
               const dta: any = i.data;
-              if (dta.type === 'RegressionScore') {
+              if (dta.type === "RegressionScore") {
                 output.remoteValidations = buildKFoldValidation(dta);
               } else {
                 output.remoteValidations = buildValidation(dta, node);
