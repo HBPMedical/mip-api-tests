@@ -10,7 +10,7 @@ TRAININGDATASETS = "desd-synthdata"
 # enable this if the MIP is in distributed mode
 # VALIDATIONDATASETS = "qqni-synthdata,nida-synthdata"
 ```
-### Docker version
+## Docker version
 either run th `./run.sh` script or manually build and run: 
 
 `docker build -t hbpmip/mipapitest .`
@@ -19,17 +19,25 @@ either run th `./run.sh` script or manually build and run:
 
 `docker run --name mipapitest--add-host="frontend:docker-ip" hbpmip/mipapitest`
 
-### Install, build and run
-#### install node
+## Install, build and run
+### install node
 see [pre-built installer for your platform](https://nodejs.org/en/download/)
 
-#### install typescript
-`npm install -g typescript`
+### install global dependencies
+`npm install -g typescript ts-node`
 or 
-`yarn global add typescript`
+`yarn global add typescript  ts-node`
 
-#### compile
-`tsc`
+## install dependencies
+`npm install` or `yarn install`
 
-#### run
-`node dist`
+### compile && run tests
+
+#### Create models (based on src/mocks.ts)
+`ts-node node_modules/tape/bin/tape index.ts models`
+
+#### Create experiments (edit in src/mocks)
+`ts-node node_modules/tape/bin/tape index.ts run`
+
+#### Test each experiment output
+`ts-node node_modules/tape/bin/tape index.ts`
