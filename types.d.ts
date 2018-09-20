@@ -60,12 +60,21 @@ export interface IExperimentResult {
   modelDefinitionId: string,
   nodes?: INode[],
   user: User;
-  algorithms: string[]
+  algorithms: Algorithm[];
+  modelDefinition?: Query;
 }
 
 export interface CodeEntity {
   code: string;
 }
+
+export interface Algorithm {
+  code: string;
+  name: string;
+  parameters: any;
+  validation: boolean;
+}
+
 export interface Query {
   filters: string;
   variables?: CodeEntity[] | null;

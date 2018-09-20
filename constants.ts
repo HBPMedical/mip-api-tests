@@ -7,7 +7,9 @@ export enum MIME_TYPES {
   PFA = 'application/pfa+json',
   PLOTLY = 'application/vnd.plotly.v1+json',
   VISJS = 'application/vnd.visjs+javascript',
-  JSONDATA = "application/vnd.dataresource+json"
+  JSONDATA = 'application/vnd.dataresource+json',
+  HTML = 'text/html',
+  TEXT = 'text/plain',
 }
 
 interface ILabel {
