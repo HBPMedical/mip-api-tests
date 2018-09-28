@@ -1,0 +1,337 @@
+TAP version 13
+# Tests up and running
+
+--- Testing Each Experiment Result
+
+
+# --- name: sgdLinearModel
+ok 1 algorithms: [{"validation":true,"code":"sgdLinearModel","name":"sgdLinearModel","parameters":[{"code":"alpha","value":"0.0001"},{"code":"penalty","value":"l2"},{"code":"l1_ratio","value":"0.15"}]}]
+ok 2 should have created date: Thu Sep 20 2018 15:23:17 GMT+0200 (CEST)
+ok 3 should have name: sgdLinearModel
+ok 4 resultsViewed: false
+ok 5 should have uuid: 90b37706-0236-427e-b218-75bc19788b6e
+ok 6 should have modelDefinitionId: regression20
+ok 7 should have user fullname: Manuel Spuhler
+ok 8 should have user.username
+ok 9 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 10 should have node.name: IRCCS Besta
+ok 11 should have node.methods: 1
+ok 12 should have method.mime: application/pfa+json
+ok 13 should have method.algorithm: python-sgd-linear-model
+ok 14 should have method.data or method.error
+ok 15 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 16 method.data: {"crossValidation":{
+ok 17 method.data should be an array
+ok 18 should have data.crossValidation or data.remoteValidation
+ok 19 should have crossValidation keys: explainedVariance,mae,mse,rmse,rsquared,type
+
+
+# --- name: naiveBayes
+ok 20 algorithms: [{"validation":true,"code":"naiveBayes","name":"naiveBayes","parameters":[{"code":"alpha","value":"1"},{"code":"class_prior","value":""}]}]
+ok 21 should have created date: Thu Sep 20 2018 15:24:18 GMT+0200 (CEST)
+ok 22 should have name: naiveBayes
+ok 23 resultsViewed: false
+ok 24 should have uuid: 11a2287c-dfa6-4172-bfb5-7281543319c2
+ok 25 should have modelDefinitionId: classification20
+ok 26 should have user fullname: Manuel Spuhler
+ok 27 should have user.username
+ok 28 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 29 should have node.name: IRCCS Besta
+ok 30 should have node.methods: 1
+ok 31 should have method.mime: application/pfa+json
+ok 32 should have method.algorithm: python-sgd-naive-bayes
+ok 33 should have method.data or method.error
+ok 34 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 35 method.data: {"crossValidation":{
+ok 36 method.data should be an array
+ok 37 should have data.crossValidation or data.remoteValidation
+ok 38 should have crossValidation keys: explainedVariance,mae,mse,rmse,rsquared,type
+
+
+# --- name: histograms
+ok 39 algorithms: [{"validation":false,"code":"histograms","name":"histograms","parameters":[]}]
+ok 40 should have created date: Thu Sep 20 2018 15:22:26 GMT+0200 (CEST)
+ok 41 should have name: histograms
+ok 42 resultsViewed: false
+ok 43 should have uuid: cc76dadf-9d56-4a40-9458-def2eb43aac4
+ok 44 should have modelDefinitionId: regression20
+ok 45 should have user fullname: Manuel Spuhler
+ok 46 should have user.username
+ok 47 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 48 should have node.name: IRCCS Besta
+ok 49 should have node.methods: 1
+ok 50 should have method.mime: application/vnd.highcharts+json
+ok 51 should have method.algorithm: python-histograms
+ok 52 should have method.data or method.error
+ok 53 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 54 method.data: {"series":[{"name":"
+ok 55 method.data should be an array
+ok 56 should have method.data[].d.chart
+
+
+# --- name: linearRegression
+ok 57 algorithms: [{"validation":false,"code":"linearRegression","name":"linearRegression","parameters":[]}]
+ok 58 should have created date: Thu Sep 20 2018 15:22:47 GMT+0200 (CEST)
+ok 59 should have name: linearRegression
+ok 60 resultsViewed: false
+ok 61 should have uuid: 40c3c7d9-4116-4095-bb9a-1e65f4e024ee
+ok 62 should have modelDefinitionId: regression20
+ok 63 should have user fullname: Manuel Spuhler
+ok 64 should have user.username
+ok 65 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 66 should have node.name: IRCCS Besta
+ok 67 should have node.methods: 1
+ok 68 should have method.mime: application/json
+ok 69 should have method.algorithm: python-linear-regression
+ok 70 should have method.data or method.error
+ok 71 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 72 method.data: {"intercept":{"coef"
+ok 73 method.data should be an array
+ok 74 should have Object.keys(data[].d)
+
+
+# --- name: sgdNeuralNetwork
+ok 75 algorithms: [{"validation":true,"code":"sgdNeuralNetwork","name":"sgdNeuralNetwork","parameters":[{"code":"hidden_layer_sizes","value":"100"},{"code":"activation","value":"relu"},{"code":"alpha","value":"0.0001"},{"code":"learning_rate_init","value":"0.001"}]}]
+ok 76 should have created date: Thu Sep 20 2018 15:24:58 GMT+0200 (CEST)
+ok 77 should have name: sgdNeuralNetwork
+ok 78 resultsViewed: false
+ok 79 should have uuid: 96543376-479d-4c7e-8af7-87a9f9211137
+ok 80 should have modelDefinitionId: classification20
+ok 81 should have user fullname: Manuel Spuhler
+ok 82 should have user.username
+ok 83 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 84 should have node.name: IRCCS Besta
+ok 85 should have node.methods: 1
+ok 86 should have method.mime: application/pfa+json
+ok 87 should have method.algorithm: python-sgd-neural-network
+ok 88 should have method.data or method.error
+ok 89 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 90 method.data: {"crossValidation":{
+ok 91 method.data should be an array
+ok 92 should have data.crossValidation or data.remoteValidation
+ok 93 should have crossValidation keys: explainedVariance,mae,mse,rmse,rsquared,type
+
+
+# --- name: gradientBoosting
+ok 94 algorithms: [{"validation":true,"code":"gradientBoosting","name":"gradientBoosting","parameters":[{"code":"learning_rate","value":"0.1"},{"code":"n_estimators","value":"100"},{"code":"max_depth","value":"3"},{"code":"min_samples_split","value":"2"},{"code":"min_samples_leaf","value":"1"},{"code":"min_weight_fraction_leaf","value":"0"},{"code":"min_impurity_decrease","value":"0"}]}]
+ok 95 should have created date: Thu Sep 20 2018 15:25:39 GMT+0200 (CEST)
+ok 96 should have name: gradientBoosting
+ok 97 resultsViewed: false
+ok 98 should have uuid: 39ae20e4-8eef-4bc1-847d-853fd26df30a
+ok 99 should have modelDefinitionId: classification20
+ok 100 should have user fullname: Manuel Spuhler
+ok 101 should have user.username
+ok 102 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+#### ERROR ####
+ok 103 Error: Timeout after 5 mn
+
+
+# --- name: anova
+ok 104 algorithms: [{"validation":false,"code":"anova","name":"anova","parameters":[]}]
+ok 105 should have created date: Thu Sep 20 2018 15:30:40 GMT+0200 (CEST)
+ok 106 should have name: anova
+ok 107 resultsViewed: false
+ok 108 should have uuid: d5e1ad74-11be-4417-9420-5cabc5321ab3
+ok 109 should have modelDefinitionId: regression21
+ok 110 should have user fullname: Manuel Spuhler
+ok 111 should have user.username
+ok 112 should have experiment.modelDefinition: {"id":100,"variables":[{"code":"lefthippocampus"}],"covariables":[{"code":"alzheimerbroadcategory"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 113 should have node.name: IRCCS Besta
+ok 114 should have node.methods: 1
+ok 115 should have method.mime: application/json
+ok 116 should have method.algorithm: python-anova
+ok 117 should have method.data or method.error
+ok 118 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 119 method.data: {"C(alzheimerbroadca
+ok 120 method.data should be an array
+ok 121 should have Object.keys(data[].d)
+
+
+# --- name: knn
+ok 122 algorithms: [{"validation":true,"code":"knn","name":"knn","parameters":[{"code":"k","value":"5"}]}]
+ok 123 should have created date: Thu Sep 20 2018 15:31:00 GMT+0200 (CEST)
+ok 124 should have name: knn
+ok 125 resultsViewed: false
+ok 126 should have uuid: a033e65e-f0f3-4ae6-9d9c-a63a7f8ec2bf
+ok 127 should have modelDefinitionId: classification20
+ok 128 should have user fullname: Manuel Spuhler
+ok 129 should have user.username
+ok 130 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+#### ERROR ####
+ok 131 Error: Timeout after 5 mn
+
+
+# --- name: correlationHeatmap
+ok 132 algorithms: [{"validation":false,"code":"correlationHeatmap","name":"correlationHeatmap","parameters":[]}]
+ok 133 should have created date: Thu Sep 20 2018 15:36:01 GMT+0200 (CEST)
+ok 134 should have name: correlationHeatmap
+ok 135 resultsViewed: false
+ok 136 should have uuid: f4648718-fb51-4a03-9924-1c64ec25725d
+ok 137 should have modelDefinitionId: regression20
+ok 138 should have user fullname: Manuel Spuhler
+ok 139 should have user.username
+ok 140 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 141 should have node.name: IRCCS Besta
+ok 142 should have node.methods: 1
+ok 143 should have method.mime: application/vnd.plotly.v1+json
+ok 144 should have method.algorithm: python-correlation-heatmap
+ok 145 should have method.data or method.error
+ok 146 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 147 method.data: {"data":[{"x":["subj
+ok 148 method.data should be an array
+ok 149 should have method.data[].d.data
+
+
+# --- name: pca
+ok 150 algorithms: [{"validation":false,"code":"pca","name":"pca","parameters":[]}]
+ok 151 should have created date: Thu Sep 20 2018 15:36:21 GMT+0200 (CEST)
+ok 152 should have name: pca
+ok 153 resultsViewed: false
+ok 154 should have uuid: 76cbfdfb-e733-4ee4-8efd-6e029942d193
+ok 155 should have modelDefinitionId: regression20
+ok 156 should have user fullname: Manuel Spuhler
+ok 157 should have user.username
+ok 158 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 159 should have node.name: IRCCS Besta
+ok 160 should have node.methods: 1
+ok 161 should have method.mime: application/vnd.plotly.v1+json
+ok 162 should have method.algorithm: python-distributed-pca
+ok 163 should have method.data or method.error
+ok 164 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 165 method.data: {"data":[{"layout":{
+ok 166 method.data should be an array
+ok 167 should have method.data[].d.data
+
+
+# --- name: hedwig
+ok 168 algorithms: [{"validation":false,"code":"hedwig","name":"hedwig","parameters":[{"code":"beam","value":"10"},{"code":"support","value":"0.1"}]}]
+ok 169 should have created date: Thu Sep 20 2018 15:36:42 GMT+0200 (CEST)
+ok 170 should have name: hedwig
+ok 171 resultsViewed: false
+ok 172 should have uuid: 340c2036-3570-4504-9ec3-a0c713007812
+ok 173 should have modelDefinitionId: classification21
+ok 174 should have user fullname: Manuel Spuhler
+ok 175 should have user.username
+ok 176 should have experiment.modelDefinition: {"id":104,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"apoe4"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 177 should have node.name: IRCCS Besta
+ok 178 should have node.methods: 1
+ok 179 should have method.mime: text/plain+error
+ok 180 should have method.algorithm: hedwig
+ok 181 should have method.data or method.error
+#### ERROR #### text/plain+error
+# Error: Job 6dce83d3-baf8-4b67-b239-ecd8f840598f using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results.
+# Does the algorithm store its results or errors in the output database?
+
+
+# --- name: hinmine
+ok 182 algorithms: [{"validation":false,"code":"hinmine","name":"hinmine","parameters":[{"code":"normalize","value":"true"},{"code":"0.85","value":"0.85"}]}]
+ok 183 should have created date: Thu Sep 20 2018 15:37:22 GMT+0200 (CEST)
+ok 184 should have name: hinmine
+ok 185 resultsViewed: false
+ok 186 should have uuid: ab4c5183-9a60-4adf-8512-c70b7f1da844
+ok 187 should have modelDefinitionId: classification20
+ok 188 should have user fullname: Manuel Spuhler
+ok 189 should have user.username
+ok 190 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+#### ERROR ####
+ok 191 Error: Timeout after 5 mn
+
+
+# --- name: tSNE-linearRegression
+ok 192 algorithms: [{"validation":false,"code":"tSNE","name":"tSNE","parameters":[]},{"validation":false,"code":"linearRegression","name":"linearRegression","parameters":[]}]
+ok 193 should have created date: Thu Sep 20 2018 15:42:23 GMT+0200 (CEST)
+ok 194 should have name: tSNE-linearRegression
+ok 195 resultsViewed: false
+ok 196 should have uuid: 1ca24d21-e039-4bdc-9081-a91263816c2b
+ok 197 should have modelDefinitionId: regression20
+ok 198 should have user fullname: Manuel Spuhler
+ok 199 should have user.username
+ok 200 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+#### ERROR ####
+ok 201 Error: Timeout after 5 mn
+
+
+# --- name: ggparci
+ok 202 algorithms: [{"validation":false,"code":"ggparci","name":"ggparci","parameters":[]}]
+ok 203 should have created date: Thu Sep 20 2018 15:47:24 GMT+0200 (CEST)
+ok 204 should have name: ggparci
+ok 205 resultsViewed: false
+ok 206 should have uuid: 294b8afe-a71a-4e99-8749-8ddcbc289637
+ok 207 should have modelDefinitionId: classification20
+ok 208 should have user fullname: Manuel Spuhler
+ok 209 should have user.username
+ok 210 should have experiment.modelDefinition: {"id":105,"variables":[{"code":"alzheimerbroadcategory"}],"covariables":[{"code":"lefthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 211 should have node.name: IRCCS Besta
+ok 212 should have node.methods: 1
+ok 213 should have method.mime: text/plain+error
+ok 214 should have method.algorithm: R
+ok 215 should have method.data or method.error
+#### ERROR #### text/plain+error
+# Error: Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
+
+
+# --- name: kmeans
+ok 216 algorithms: [{"validation":false,"code":"kmeans","name":"kmeans","parameters":[]}]
+ok 217 should have created date: Thu Sep 20 2018 15:47:44 GMT+0200 (CEST)
+ok 218 should have name: kmeans
+ok 219 resultsViewed: false
+ok 220 should have uuid: 22319243-a003-42cb-95ac-500e4041095c
+ok 221 should have modelDefinitionId: regression20
+ok 222 should have user fullname: Manuel Spuhler
+ok 223 should have user.username
+ok 224 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+ok 225 should have node.name: IRCCS Besta
+ok 226 should have node.methods: 1
+ok 227 should have method.mime: application/pfa+json
+ok 228 should have method.algorithm: python-distributed-kmeans
+ok 229 should have method.data or method.error
+ok 230 node.methods.length should be equal to experiment.algorithms.length: 1 === 1
+ok 231 method.data: {}
+ok 232 method.data should be an array
+not ok 233 should have data.crossValidation or data.remoteValidation
+  ---
+    operator: ok
+    expected: true
+    actual:   undefined
+    at: method.data.map (/home/manu/workdir/mip-api-tests/src/MIPTests.ts:288:27)
+    stack: |-
+      Error: should have data.crossValidation or data.remoteValidation
+          at Test.assert [as _assert] (/home/manu/workdir/mip-api-tests/node_modules/tape/lib/test.js:224:54)
+          at Test.bound [as _assert] (/home/manu/workdir/mip-api-tests/node_modules/tape/lib/test.js:76:32)
+          at Test.assert (/home/manu/workdir/mip-api-tests/node_modules/tape/lib/test.js:342:10)
+          at Test.bound [as ok] (/home/manu/workdir/mip-api-tests/node_modules/tape/lib/test.js:76:32)
+          at method.data.map (/home/manu/workdir/mip-api-tests/src/MIPTests.ts:288:27)
+          at Array.map (<anonymous>)
+          at node.methods.forEach (/home/manu/workdir/mip-api-tests/src/MIPTests.ts:282:33)
+          at Array.forEach (<anonymous>)
+          at nodes.forEach.node (/home/manu/workdir/mip-api-tests/src/MIPTests.ts:237:22)
+          at Array.forEach (<anonymous>)
+  ...
+
+
+# --- name: heatmaply
+ok 234 algorithms: [{"validation":false,"code":"heatmaply","name":"heatmaply","parameters":[]}]
+ok 235 should have created date: Thu Sep 20 2018 15:48:05 GMT+0200 (CEST)
+ok 236 should have name: heatmaply
+ok 237 resultsViewed: false
+ok 238 should have uuid: d3ff9280-0631-4d99-a948-23a08bcb0065
+ok 239 should have modelDefinitionId: regression20
+ok 240 should have user fullname: Manuel Spuhler
+ok 241 should have user.username
+ok 242 should have experiment.modelDefinition: {"id":106,"variables":[{"code":"subjectageyears"}],"covariables":[{"code":"lefthippocampus"},{"code":"righthippocampus"}],"grouping":[],"trainingDatasets":[{"code":"IRCCSBesta"},{"code":"ppmi"},{"code":"edsd"},{"code":"adni"}],"testingDatasets":[],"validationDatasets":[],"filters":""}
+#### ERROR ####
+ok 243 Error: Timeout after 5 mn
+
+
+
+# ----------------------------------------------------------------
+# 7 methods on 17 had errors on 56 experiments
+# ------------------------------------------------------------
+
+
+That's all folks
+
+1..243
+# tests 243
+# pass  242
+# fail  1
