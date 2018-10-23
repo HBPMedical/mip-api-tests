@@ -1,0 +1,4 @@
+[submodule "portal-frontend"]
+	path = portal-frontend
+	url = git@github.com:nicedexter/portal-frontend.git
+	branch = react
