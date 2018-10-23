@@ -1,14 +1,18 @@
-import {
-  ExperimentContainer,
-  ExperimentListContainer,
-  ModelContainer,
-} from '../containers';
-import { IExperimentResult, IModelResult, INode } from '../types';
-import { IExperiment, IModelSamples } from './mocks';
-import { MIME_TYPES } from '../constants';
-import tape from 'tape';
+import ExperimentContainer from '../portal-frontend/app/v3/src/containers/Experiments/ExperimentContainer';
+import ExperimentListContainer from '../portal-frontend/app/v3/src/containers/Experiments/ExperimentListContainer';
+import ModelContainer from '../portal-frontend/app/v3/src/containers/Models/ModelContainer';
 
-const experimentContainer = new ExperimentContainer();
+import {
+  IExperimentResult,
+  IModelResult,
+  INode,
+} from '../portal-frontend/app/v3/src/types';
+import { IExperiment, IModelSamples } from './mocks';
+import { MIME_TYPES } from '../portal-frontend/app/v3/src/constants';
+import tape from 'tape';
+import config from './config'
+
+const experimentContainer = new ExperimentContainer(config);
 enum sourceType {
   list,
   item,
@@ -29,7 +33,7 @@ export default class {
 
   public createModels = async (models: IModelSamples): Promise<boolean> => {
     const create = async () => {
-      const modelContainer = new ModelContainer();
+      const modelContainer = new ModelContainer(config);
       const results = await Promise.all(
         Object.keys(models).map(async key => {
           await modelContainer.load(key);
@@ -60,8 +64,9 @@ export default class {
 
           this.hasNetworkError(modelContainer.state.error);
           if (result) {
+            FIXME:
             console.log(
-              `Model ${result.slug}: ${JSON.stringify(result.query)}`,
+              `Model : ${JSON.stringify(result)}`,
             );
           }
 
@@ -108,7 +113,7 @@ export default class {
     fromHourAgo: number = Number.MAX_SAFE_INTEGER,
   ): Promise<any> => {
     console.log('\n--- Testing Each Experiment Result');
-    const experimentListContainer = new ExperimentListContainer();
+    const experimentListContainer = new ExperimentListContainer(config);
     await experimentListContainer.load();
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
@@ -144,7 +149,7 @@ export default class {
 
   public testExperimentListResults = async (t: tape.Test) => {
     console.log('\n--- Testing Experiment List Results');
-    const experimentListContainer = new ExperimentListContainer();
+    const experimentListContainer = new ExperimentListContainer(config);
     await experimentListContainer.load();
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
@@ -219,17 +224,17 @@ export default class {
     );
     t.ok(experiment.user.username, 'should have user.username');
 
-    if (experiment.modelDefinition) {
+    if (experiment.modelDefinitionId) {
       t.ok(
-        experiment.modelDefinition,
+        experiment.modelDefinitionId,
         `should have experiment.modelDefinition: ${JSON.stringify(
-          experiment.modelDefinition,
+          experiment.modelDefinitionId,
         )}`,
       );
     }
 
-    if (experiment.nodes) {
-      const nodes: INode[] = experiment.nodes;
+    if (experiment.results) {
+      const nodes: INode[] = experiment.results;
       nodes.forEach(node => {
         t.ok(node.name, `should have node.name: ${node.name}`);
         t.ok(node.methods, `should have node.methods: ${node.methods.length}`);
@@ -462,7 +467,7 @@ export default class {
     const state = experimentContainer.state;
     const experiment: IExperimentResult | undefined = state.experiment;
 
-    const nodes = experiment && experiment.nodes;
+    const nodes = experiment && experiment.results;
     const error = (state && state.error) || (experiment && experiment.error);
     const loading = !nodes && !error;
 
