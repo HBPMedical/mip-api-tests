@@ -2,15 +2,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-// const trainingDatasetsValue = process.env.REACT_APP_TRAININGDATASETS;
-// const trainingDatasets: string[] = trainingDatasetsValue
-//   ? trainingDatasetsValue.split(",")
-//   : [];
-// const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
-// const validationDatasets: string[] = validationDatasetsValue
-//   ? validationDatasetsValue.split(",")
-//   : [];
-const Cookie = process.env.REACT_APP_COOKIE;
+const Cookie = process.env.COOKIE;
 
 const options: any ={
     headers: {
@@ -21,5 +13,6 @@ const options: any ={
   };
 
 const baseUrl = `${process.env.BACKEND_URL}`;
+const username = process.env.USERNAME;
 
-export default  { options, baseUrl };
+export default { options, baseUrl, username };

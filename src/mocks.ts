@@ -23,7 +23,7 @@ interface ICode {
   code: string;
 }
 
-export interface IModelSamples {
+export interface IModels {
   [key: string]: IModel;
 }
 
@@ -39,14 +39,14 @@ export interface IModel {
 
 export interface IModelNames {
   [key: string]: IModel;
-  classification20: IModel;
-  classification21: IModel;
-  regression20: IModel;
-  regression21: IModel;
+  classification1: IModel;
+  classification2: IModel;
+  regression2: IModel;
+  regression1: IModel;
 }
 
 export const models: IModelNames = {
-  classification20: {
+  classification1: {
     coVariables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
@@ -55,7 +55,7 @@ export const models: IModelNames = {
     validationDatasets,
     variables: [{ code: 'alzheimerbroadcategory' }],
   },
-  classification21: {
+  classification2: {
     coVariables: [{ code: 'apoe4' }],
     filters: '',
     groupings: [],
@@ -64,7 +64,7 @@ export const models: IModelNames = {
     validationDatasets,
     variables: [{ code: 'alzheimerbroadcategory' }],
   },
-  regression20: {
+  regression2: {
     coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
     filters: '',
     groupings: [],
@@ -73,7 +73,7 @@ export const models: IModelNames = {
     validationDatasets,
     variables: [{ code: 'subjectageyears' }],
   },
-  regression21: {
+  regression1: {
     coVariables: [{ code: 'alzheimerbroadcategory' }],
     filters: '',
     groupings: [],
@@ -111,7 +111,7 @@ export interface IExperiment {
 
 export const experiments = [
   {
-    model: models.regression20,
+    model: models.regression2,
     name: 'histograms',
     status: 'ok',
 
@@ -130,89 +130,89 @@ export const experiments = [
         parameters: [],
       },
     ],
-    model: models.regression20,
+    model: models.regression2,
     name: 'linearRegression',
     status: 'ok',
     validations: [],
   },
-  {
-    methods: [
-      {
-        code: 'sgdLinearModel',
+  // {
+  //   methods: [
+  //     {
+  //       code: 'sgdLinearModel',
 
-        parameters: [
-          {
-            code: 'alpha',
-            value: '0.0001',
-          },
-          {
-            code: 'penalty',
-            value: 'l2',
-          },
-          {
-            code: 'l1_ratio',
-            value: '0.15',
-          },
-        ],
-      },
-    ],
-    model: models.regression20,
-    name: 'sgdLinearModel',
-    status: 'ok',
-    validations: [kfold],
-  },
-  {
-    methods: [
-      {
-        code: 'naiveBayes',
+  //       parameters: [
+  //         {
+  //           code: 'alpha',
+  //           value: '0.0001',
+  //         },
+  //         {
+  //           code: 'penalty',
+  //           value: 'l2',
+  //         },
+  //         {
+  //           code: 'l1_ratio',
+  //           value: '0.15',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'sgdLinearModel',
+  //   status: 'ok',
+  //   validations: [kfold],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'naiveBayes',
 
-        parameters: [
-          {
-            code: 'alpha',
-            value: '1',
-          },
-          {
-            code: 'class_prior',
-            value: '',
-          },
-        ],
-      },
-    ],
-    model: models.classification20,
-    name: 'naiveBayes',
-    status: 'ok',
-    validations: [kfold],
-  },
-  {
-    methods: [
-      {
-        code: 'sgdNeuralNetwork',
+  //       parameters: [
+  //         {
+  //           code: 'alpha',
+  //           value: '1',
+  //         },
+  //         {
+  //           code: 'class_prior',
+  //           value: '',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'naiveBayes',
+  //   status: 'ok',
+  //   validations: [kfold],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'sgdNeuralNetwork',
 
-        parameters: [
-          {
-            code: 'hidden_layer_sizes',
-            value: '100',
-          },
-          {
-            code: 'activation',
-            value: 'relu',
-          },
-          {
-            code: 'alpha',
-            value: '0.0001',
-          },
-          {
-            code: 'learning_rate_init',
-            value: '0.001',
-          },
-        ],
-      },
-    ],
-    model: models.classification20,
-    name: 'sgdNeuralNetwork',
-    status: 'ok',
-    validations: [kfold],
-  },
+  //       parameters: [
+  //         {
+  //           code: 'hidden_layer_sizes',
+  //           value: '100',
+  //         },
+  //         {
+  //           code: 'activation',
+  //           value: 'relu',
+  //         },
+  //         {
+  //           code: 'alpha',
+  //           value: '0.0001',
+  //         },
+  //         {
+  //           code: 'learning_rate_init',
+  //           value: '0.001',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'sgdNeuralNetwork',
+  //   status: 'ok',
+  //   validations: [kfold],
+  // },
   {
     methods: [
       {
@@ -250,23 +250,23 @@ export const experiments = [
         ],
       },
     ],
-    model: models.classification20,
+    model: models.classification1,
     name: 'gradientBoosting',
     status: 'ok',
     validations: [kfold],
   },
-  {
-    methods: [
-      {
-        code: 'anova',
-        parameters: [],
-      },
-    ],
-    model: models.regression21,
-    name: 'anova',
-    status: 'ok',
-    validations: [],
-  },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'anova',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression1,
+  //   name: 'anova',
+  //   status: 'ok',
+  //   validations: [],
+  // },
   {
     methods: [
       {
@@ -279,36 +279,36 @@ export const experiments = [
         ],
       },
     ],
-    model: models.classification20,
+    model: models.classification1,
     name: 'knn',
     status: 'ok',
     validations: [kfold],
   },
-  {
-    methods: [
-      {
-        code: 'correlationHeatmap', // no displayable result, what variables should be used?
-        parameters: [],
-      },
-    ],
-    model: models.regression20,
-    name: 'correlationHeatmap',
-    status: 'ko',
-    validations: [],
-  },
-  {
-    methods: [
-      {
-        code: 'pca',
-        parameters: [],
-      },
-    ],
-    model: models.regression20,
-    name: 'pca',
-    status: 'ok',
+  // {
+  //   methods: [
+  //     {
+  //       code: 'correlationHeatmap', // no displayable result, what variables should be used?
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'correlationHeatmap',
+  //   status: 'ko',
+  //   validations: [],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'pca',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'pca',
+  //   status: 'ok',
 
-    validations: [],
-  },
+  //   validations: [],
+  // },
   {
     methods: [
       {
@@ -325,7 +325,7 @@ export const experiments = [
         ],
       },
     ],
-    model: models.classification21,
+    model: models.classification2,
     name: 'hedwig',
     status: 'ko',
     validations: [],
@@ -346,27 +346,27 @@ export const experiments = [
         ],
       },
     ],
-    model: models.classification20,
+    model: models.classification1,
     name: 'hinmine',
     status: 'ko',
     validations: [],
   },
-  {
-    methods: [
-      {
-        code: 'tSNE',
-        parameters: [],
-      },
-      {
-        code: 'linearRegression',
-        parameters: [],
-      },
-    ],
-    model: models.regression20,
-    name: 'tSNE-linearRegression',
-    status: 'ok',
-    validations: [],
-  },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'tSNE',
+  //       parameters: [],
+  //     },
+  //     {
+  //       code: 'linearRegression',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'tSNE-linearRegression',
+  //   status: 'ok',
+  //   validations: [],
+  // },
   {
     methods: [
       {
@@ -374,7 +374,7 @@ export const experiments = [
         parameters: [],
       },
     ],
-    model: models.classification20,
+    model: models.classification1,
     name: 'ggparci',
     status: 'ko', // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
     validations: [],
@@ -386,7 +386,7 @@ export const experiments = [
         parameters: [],
       },
     ],
-    model: models.regression20,
+    model: models.regression2,
     name: 'kmeans',
     status: 'ok',
     validations: [],
@@ -398,7 +398,7 @@ export const experiments = [
         parameters: [],
       },
     ],
-    model: models.regression20,
+    model: models.regression2,
     name: 'heatmaply',
     status: 'ko', // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
     validations: [],

@@ -7,10 +7,27 @@ import {
   IModelResult,
   INode,
 } from '../portal-frontend/app/v3/src/types';
-import { IExperiment, IModelSamples } from './mocks';
+import { IExperiment, IModel, IModels } from './mocks';
 import { MIME_TYPES } from '../portal-frontend/app/v3/src/constants';
 import tape from 'tape';
-import config from './config'
+import config from './config';
+
+const modelTemplate = (slug: string, model: IModel) => ({
+  title: slug,
+  valid: true,
+  createdAt: 1540561037000,
+  query: model,
+  dataset: {
+    code: 'DS1540825503020',
+  },
+  config: {
+    title: { text: slug },
+  },
+  createdBy: {
+    username: config.username,
+  },
+});
+
 
 const experimentContainer = new ExperimentContainer(config);
 enum sourceType {
@@ -31,50 +48,22 @@ export default class {
     this.methodListCount = 0;
   }
 
-  public createModels = async (models: IModelSamples): Promise<boolean> => {
+  public createModel = async (key: string, model: IModel): Promise<boolean> => {
     const create = async () => {
       const modelContainer = new ModelContainer(config);
-      const results = await Promise.all(
-        Object.keys(models).map(async key => {
-          await modelContainer.load(key);
-          let result: IModelResult | undefined = modelContainer.state.model;
-          if (result === undefined) {
-            await modelContainer.create({
-              config: {
-                hasXAxis: true,
-                height: 480,
-                title: {
-                  text: key,
-                },
-                type: 'designmatrix',
-                xAxisVariable: null,
-                yAxisVariables: ['apoe4'],
-              },
-              dataset: {
-                code: 'DS1528208604241',
-                date: 1533814206000,
-                grouping: [],
-                header: models[key].coVariables.map((v: any) => v.code),
-                variable: models[key].variables.map((v: any) => v.code),
-              },
-              query: models[key],
-            });
-            result = modelContainer.state.model;
-          }
+      await modelContainer.load(key);
+      let result: IModelResult | undefined = modelContainer.state.model;
+      if (result === undefined) {
+        console.log(`Create ${key}`);
+        await modelContainer.create(modelTemplate(key, model));
+        result = modelContainer.state.model;
+      } else {
+        console.log(`Existing: ${key}`);
+      }
 
-          this.hasNetworkError(modelContainer.state.error);
-          if (result) {
-            FIXME:
-            console.log(
-              `Model : ${JSON.stringify(result)}`,
-            );
-          }
+      this.hasNetworkError(modelContainer.state.error);
 
-          return result;
-        }),
-      );
-
-      return results.every(v => v !== undefined);
+      return result ? true : false;
     };
 
     let modelsCreated: boolean = false;
@@ -88,16 +77,25 @@ export default class {
   public runExperiments = async (
     t: tape.Test,
     iexperiments: IExperiment[],
-    models: IModelSamples,
+    models: IModels,
   ): Promise<any> => {
     let experimentCreated: any;
     const experiments = [...iexperiments];
     let experiment = experiments.shift();
     do {
-      const model = Object.keys(models).find(
+      const slug = Object.keys(models).find(
         (key: string) => models[key] === experiment!.model,
       );
-      experimentCreated = await this.runAndWaitExperiment(experiment, model);
+
+      const updatedModel = await this.updateModel(slug!, models[slug!]);
+      console.log({ updatedModel });
+      if (!updatedModel) {
+        console.log('Model was not updated');
+
+        return;
+      }
+
+      experimentCreated = await this.runAndWaitExperiment(experiment, slug);
 
       if (experimentCreated) {
         this.testExperiment(experimentCreated.experiment, sourceType.item, t);
@@ -180,6 +178,19 @@ export default class {
     }
 
     return false;
+  }
+
+  public updateModel = async (slug: string, model: any) => {
+    const modelContainer = new ModelContainer(config);
+    const newModel = { ...modelTemplate(slug, model), slug };
+    await modelContainer.update(newModel);
+    if (!modelContainer.state.model) {
+      console.log(`Model: ${slug} error ${modelContainer.state.error}`);
+      return Promise.resolve(false);
+    }
+
+    console.log(`${slug} updated`);
+    return Promise.resolve(true);
   }
 
   private testExperiment = (
@@ -422,7 +433,7 @@ export default class {
 
   private runAndWaitExperiment = async (
     experiment: any,
-    model: any,
+    slug: any,
   ): Promise<{ experiment: any } | any> => {
     return new Promise(async resolve => {
       const exp = {
@@ -432,7 +443,7 @@ export default class {
           parameters: m.parameters,
           validation: experiment.validations.length ? true : false,
         })),
-        model,
+        model: slug,
         name: experiment.name,
         validations: experiment.validations,
       };

@@ -1,23 +1,37 @@
 import MIPTests from './src/MIPTests';
 import { experiments, models } from './src/mocks';
 import tape from 'tape';
+import config from './src/config';
 
-const argv = process.argv;
-const hasCreateModel = argv.join(' ').match(/model/)
-const hasRunExperiment = argv.join(' ').match(/run/)
+const argv = process.argv.join(' ');
+console.log('\narguments: model | update | run | test\n')
 
-tape('Tests up and running', (t: tape.Test) => {
+tape(`Running tests on ${config.baseUrl}\n`, (t: tape.Test) => {
   (async mip => {
-    if (hasCreateModel) {
-      await mip.createModels(models);
-      process.exit(0) // FIXME: be sure model are created
+    if (argv.match(/model/)) {
+      const createdModels = await Promise.all(
+        Object.keys(models).map(key => mip.createModel(key, models[key])),
+      );
+      t.ok(createdModels.every(x => x), `Models created`);
     }
-    if (hasRunExperiment) {
+
+    if (argv.match(/update/)) {
+      const updatedModels = await Promise.all(
+        Object.keys(models).map(key => mip.updateModel(key, models[key])),
+      );
+      t.ok(updatedModels.every(x => x), `Models updated`);
+    }
+
+    if (argv.match(/run/)) {
       await mip.runExperiments(t, experiments, models);
     }
-    // await mip.testExperimentListResults(t);
-    await mip.testEachExperimentResult(t, 2);
+
+    if (argv.match(/test/)) {
+      await mip.testEachExperimentResult(t, 2);
+    }
+
     console.log('\n\nThat\'s all folks');
+
     t.end();
   })(new MIPTests());
 });
