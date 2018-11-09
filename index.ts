@@ -27,7 +27,7 @@ tape(`Running tests on ${config.baseUrl}\n`, (t: tape.Test) => {
     }
 
     if (argv.match(/test/)) {
-      await mip.testEachExperimentResult(t, 2);
+      await mip.testEachExperimentResult(t, 1.5);
     }
 
     console.log('\n\nThat\'s all folks');

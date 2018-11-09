@@ -1,23 +1,14 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const trainingDatasetsValue = process.env.TRAININGDATASETS;
-const trainingDatasets = trainingDatasetsValue
-  ? trainingDatasetsValue.split(',')
-  : [];
-const validationDatasetsValue = process.env.VALIDATIONDATASETS;
-const validationDatasets: string[] = validationDatasetsValue
-  ? validationDatasetsValue.split(',')
-  : [];
-const Cookie = process.env.COOKIE;
-
-export const config: any = {
-  headers: {
-    Authorization: process.env.AUTHORIZATION!,
-    Cookie,
-    'X-XSRF-TOKEN': (Cookie && Cookie.match(/XSRF-TOKEN=(.*)/)![1]) || '',
-  },
-};
+// const trainingDatasetsValue = process.env.TRAININGDATASETS;
+// const trainingDatasets = trainingDatasetsValue
+//   ? trainingDatasetsValue.split(',')
+//   : [];
+// const validationDatasetsValue = process.env.VALIDATIONDATASETS;
+// const validationDatasets: string[] = validationDatasetsValue
+//   ? validationDatasetsValue.split(',')
+//   : [];
 
 interface ICode {
   code: string;
@@ -37,63 +28,13 @@ export interface IModel {
   variables: ICode[];
 }
 
-export interface IModelNames {
-  [key: string]: IModel;
-  classification1: IModel;
-  classification2: IModel;
-  regression2: IModel;
-  regression1: IModel;
-}
-
-export const models: IModelNames = {
-  classification1: {
-    coVariables: [{ code: 'lefthippocampus' }],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets,
-    validationDatasets,
-    variables: [{ code: 'alzheimerbroadcategory' }],
-  },
-  classification2: {
-    coVariables: [{ code: 'apoe4' }],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets,
-    validationDatasets,
-    variables: [{ code: 'alzheimerbroadcategory' }],
-  },
-  regression2: {
-    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets,
-    validationDatasets,
-    variables: [{ code: 'subjectageyears' }],
-  },
-  regression1: {
-    coVariables: [{ code: 'alzheimerbroadcategory' }],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets,
-    validationDatasets,
-    variables: [{ code: 'lefthippocampus' }],
-  },
-};
-
-const kfold = {
-  code: 'kfold',
-  name: 'validation',
-  parameters: [
-    {
-      code: 'k',
-      value: '2',
-    },
-  ],
-};
+// export interface IModelNames {
+//   [key: string]: IModel;
+//   // histogram1: IModel;
+//   regression1: IModel;
+//   regression2: IModel;
+//   regression3: IModel;
+// }
 
 export interface IMethod {
   code: string;
@@ -109,9 +50,62 @@ export interface IExperiment {
   uuid?: string;
 }
 
+export const models: any = {
+  histogram1: {
+    coVariables: [{ code: 'subjectageyears' }],
+    filters: '',
+    groupings: [{ code: 'gender' }, { code: 'alzheimerbroadcategory' }],
+    testingDatasets: [],
+    trainingDatasets: ['clm', 'lille_chru','fbf'],
+    validationDatasets: [],
+    variables: [{ code: 'lefthippocampus' }],
+  },
+  regression1: {
+    coVariables: [{ code: 'subjectageyears' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"50"},{"condition":"OR","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"AD"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"CN"}]}],"valid":true}',
+    groupings: [{ code: 'alzheimerbroadcategory' }],
+    testingDatasets: [],
+    trainingDatasets: ['adni'],
+    validationDatasets: [],
+    variables: [{ code: 'righthippocampus' }],
+  },
+  regression2: {
+    coVariables: [{ code: 'subjectageyears' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"50"},{"condition":"OR","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"AD"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"CN"}]}],"valid":true}',
+    groupings: [{ code: 'alzheimerbroadcategory' }],
+    testingDatasets: [],
+    trainingDatasets: ['clm'],
+    validationDatasets: [],
+    variables: [{ code: 'righthippocampus' }],
+  },
+  regression3: {
+    coVariables: [{ code: 'subjectageyears' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"50"},{"condition":"OR","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"AD"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"equal","value":"CN"}]}],"valid":true}',
+    groupings: [{ code: 'alzheimerbroadcategory' }],
+    testingDatasets: [],
+    trainingDatasets: ['adni', 'clm','fbf'],
+    validationDatasets: [],
+    variables: [{ code: 'righthippocampus' }],
+  }
+};
+
+// const kfold = {
+//   code: 'kfold',
+//   name: 'validation',
+//   parameters: [
+//     {
+//       code: 'k',
+//       value: '2',
+//     },
+//   ],
+// };
+
 export const experiments = [
   {
-    model: models.regression2,
+    model: models.histogram1,
     name: 'histograms',
     status: 'ok',
 
@@ -124,17 +118,57 @@ export const experiments = [
     validations: [],
   },
   {
+    model: models.regression1,
+    name: 'regression1',
+    status: 'ok',
+
     methods: [
       {
         code: 'linearRegression',
         parameters: [],
       },
     ],
-    model: models.regression2,
-    name: 'linearRegression',
-    status: 'ok',
     validations: [],
   },
+  {
+    model: models.regression2,
+    name: 'regression2',
+    status: 'ok',
+
+    methods: [
+      {
+        code: 'linearRegression',
+        parameters: [],
+      },
+    ],
+    validations: [],
+  },
+  {
+    model: models.regression3,
+    name: 'regression3',
+    status: 'ok',
+
+    methods: [
+      {
+        code: 'linearRegression',
+        parameters: [],
+      },
+    ],
+    validations: [],
+  },
+
+  // {
+  //   methods: [
+  //     {
+  //       code: 'linearRegression',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'linearRegression',
+  //   status: 'ok',
+  //   validations: [],
+  // },
   // {
   //   methods: [
   //     {
@@ -213,48 +247,48 @@ export const experiments = [
   //   status: 'ok',
   //   validations: [kfold],
   // },
-  {
-    methods: [
-      {
-        code: 'gradientBoosting',
+  // {
+  //   methods: [
+  //     {
+  //       code: 'gradientBoosting',
 
-        parameters: [
-          {
-            code: 'learning_rate',
-            value: '0.1',
-          },
-          {
-            code: 'n_estimators',
-            value: '100',
-          },
-          {
-            code: 'max_depth',
-            value: '3',
-          },
-          {
-            code: 'min_samples_split',
-            value: '2',
-          },
-          {
-            code: 'min_samples_leaf',
-            value: '1',
-          },
-          {
-            code: 'min_weight_fraction_leaf',
-            value: '0',
-          },
-          {
-            code: 'min_impurity_decrease',
-            value: '0',
-          },
-        ],
-      },
-    ],
-    model: models.classification1,
-    name: 'gradientBoosting',
-    status: 'ok',
-    validations: [kfold],
-  },
+  //       parameters: [
+  //         {
+  //           code: 'learning_rate',
+  //           value: '0.1',
+  //         },
+  //         {
+  //           code: 'n_estimators',
+  //           value: '100',
+  //         },
+  //         {
+  //           code: 'max_depth',
+  //           value: '3',
+  //         },
+  //         {
+  //           code: 'min_samples_split',
+  //           value: '2',
+  //         },
+  //         {
+  //           code: 'min_samples_leaf',
+  //           value: '1',
+  //         },
+  //         {
+  //           code: 'min_weight_fraction_leaf',
+  //           value: '0',
+  //         },
+  //         {
+  //           code: 'min_impurity_decrease',
+  //           value: '0',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'gradientBoosting',
+  //   status: 'ok',
+  //   validations: [kfold],
+  // },
   // {
   //   methods: [
   //     {
@@ -267,23 +301,23 @@ export const experiments = [
   //   status: 'ok',
   //   validations: [],
   // },
-  {
-    methods: [
-      {
-        code: 'knn',
-        parameters: [
-          {
-            code: 'k',
-            value: '5',
-          },
-        ],
-      },
-    ],
-    model: models.classification1,
-    name: 'knn',
-    status: 'ok',
-    validations: [kfold],
-  },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'knn',
+  //       parameters: [
+  //         {
+  //           code: 'k',
+  //           value: '5',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'knn',
+  //   status: 'ok',
+  //   validations: [kfold],
+  // },
   // {
   //   methods: [
   //     {
@@ -309,48 +343,48 @@ export const experiments = [
 
   //   validations: [],
   // },
-  {
-    methods: [
-      {
-        code: 'hedwig', // Job dcb21fac-6766-43af-87c2-b8921c5734ef using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results. Does the algorithm store its results or errors in the output database?
-        parameters: [
-          {
-            code: 'beam',
-            value: '10',
-          },
-          {
-            code: 'support',
-            value: '0.1',
-          },
-        ],
-      },
-    ],
-    model: models.classification2,
-    name: 'hedwig',
-    status: 'ko',
-    validations: [],
-  },
-  {
-    methods: [
-      {
-        code: 'hinmine',
-        parameters: [
-          {
-            code: 'normalize',
-            value: 'true',
-          },
-          {
-            code: '0.85',
-            value: '0.85',
-          },
-        ],
-      },
-    ],
-    model: models.classification1,
-    name: 'hinmine',
-    status: 'ko',
-    validations: [],
-  },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'hedwig', // Job dcb21fac-6766-43af-87c2-b8921c5734ef using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results. Does the algorithm store its results or errors in the output database?
+  //       parameters: [
+  //         {
+  //           code: 'beam',
+  //           value: '10',
+  //         },
+  //         {
+  //           code: 'support',
+  //           value: '0.1',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification2,
+  //   name: 'hedwig',
+  //   status: 'ko',
+  //   validations: [],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'hinmine',
+  //       parameters: [
+  //         {
+  //           code: 'normalize',
+  //           value: 'true',
+  //         },
+  //         {
+  //           code: '0.85',
+  //           value: '0.85',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'hinmine',
+  //   status: 'ko',
+  //   validations: [],
+  // },
   // {
   //   methods: [
   //     {
@@ -367,42 +401,42 @@ export const experiments = [
   //   status: 'ok',
   //   validations: [],
   // },
-  {
-    methods: [
-      {
-        code: 'ggparci',
-        parameters: [],
-      },
-    ],
-    model: models.classification1,
-    name: 'ggparci',
-    status: 'ko', // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
-    validations: [],
-  },
-  {
-    methods: [
-      {
-        code: 'kmeans',
-        parameters: [],
-      },
-    ],
-    model: models.regression2,
-    name: 'kmeans',
-    status: 'ok',
-    validations: [],
-  },
-  {
-    methods: [
-      {
-        code: 'heatmaply',
-        parameters: [],
-      },
-    ],
-    model: models.regression2,
-    name: 'heatmaply',
-    status: 'ko', // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
-    validations: [],
-  },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'ggparci',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.classification1,
+  //   name: 'ggparci',
+  //   status: 'ko', // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
+  //   validations: [],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'kmeans',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'kmeans',
+  //   status: 'ok',
+  //   validations: [],
+  // },
+  // {
+  //   methods: [
+  //     {
+  //       code: 'heatmaply',
+  //       parameters: [],
+  //     },
+  //   ],
+  //   model: models.regression2,
+  //   name: 'heatmaply',
+  //   status: 'ko', // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
+  //   validations: [],
+  // },
 
   // { code: "WP_VARIABLES_HISTOGRAM" },
   // { code: "PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER" },

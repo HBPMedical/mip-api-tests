@@ -24,7 +24,7 @@ const modelTemplate = (slug: string, model: IModel) => ({
     title: { text: slug },
   },
   createdBy: {
-    username: config.username,
+    username: 'anonymous',
   },
 });
 
