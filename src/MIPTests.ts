@@ -1,6 +1,5 @@
-import ExperimentContainer from '../portal-frontend/app/v3/src/containers/Experiments/ExperimentContainer';
-import ExperimentListContainer from '../portal-frontend/app/v3/src/containers/Experiments/ExperimentListContainer';
-import ModelContainer from '../portal-frontend/app/v3/src/containers/Models/ModelContainer';
+import ExperimentContainer from '../portal-frontend/app/v3/src/containers/api/ExperimentContainer';
+import ModelContainer from '../portal-frontend/app/v3/src/containers/api/ModelContainer';
 
 import {
   IExperimentResult,
@@ -51,7 +50,7 @@ export default class {
   public createModel = async (key: string, model: IModel): Promise<boolean> => {
     const create = async () => {
       const modelContainer = new ModelContainer(config);
-      await modelContainer.load(key);
+      await modelContainer.one(key);
       let result: IModelResult | undefined = modelContainer.state.model;
       if (result === undefined) {
         console.log(`Create ${key}`);
@@ -111,8 +110,8 @@ export default class {
     fromHourAgo: number = Number.MAX_SAFE_INTEGER,
   ): Promise<any> => {
     console.log('\n--- Testing Each Experiment Result');
-    const experimentListContainer = new ExperimentListContainer(config);
-    await experimentListContainer.load();
+    const experimentListContainer = new ExperimentContainer(config);
+    await experimentListContainer.all();
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
 
@@ -123,7 +122,7 @@ export default class {
       let experiment = experiments.shift(); // FIXME: should be unmutable
       if (experiment) {
         do {
-          await experimentContainer.load(experiment.uuid);
+          await experimentContainer.one(experiment.uuid);
           const theExperiment = experimentContainer.state.experiment;
           if (theExperiment) {
             this.testExperiment(theExperiment, sourceType.item, t, fromHourAgo);
@@ -147,8 +146,8 @@ export default class {
 
   public testExperimentListResults = async (t: tape.Test) => {
     console.log('\n--- Testing Experiment List Results');
-    const experimentListContainer = new ExperimentListContainer(config);
-    await experimentListContainer.load();
+    const experimentListContainer = new ExperimentContainer(config);
+    await experimentListContainer.all();
     const experiments: IExperimentResult[] | undefined =
       experimentListContainer.state.experiments;
 
@@ -474,7 +473,7 @@ export default class {
   private experimentLoadingStatus = async (
     uuid: string,
   ): Promise<{ loading: boolean; experiment: any }> => {
-    await experimentContainer.load(uuid);
+    await experimentContainer.one(uuid);
     const state = experimentContainer.state;
     const experiment: IExperimentResult | undefined = state.experiment;
 
