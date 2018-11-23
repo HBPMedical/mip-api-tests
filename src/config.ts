@@ -1,11 +1,28 @@
 const MOCK_FILE = 'review'; // all
 
-
 const BACKEND_URL = 'http://frontend/services';
 const USERNAME = 'anonymous';
 const TRAININGDATASETS = 'clm,adni,fbf,edsd,lille_chru,ppmi';
 const VALIDATIONDATASETS = '';
 const COOKIE: string = '';
+
+const options: any = {
+  headers: {
+    Authorization: 'Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex',
+    Cookie: COOKIE,
+    'X-XSRF-TOKEN': (COOKIE && COOKIE.match(/XSRF-TOKEN=(.*)/)![1]) || '',
+  },
+};
+
+export default {
+  baseUrl: BACKEND_URL,
+  options,
+  TRAININGDATASETS,
+  username: USERNAME,
+  VALIDATIONDATASETS,
+  MOCK_FILE
+};
+
 
 // const BACKEND_URL = 'http://155.105.202.79/services';
 // const USERNAME = 'anonymous';
@@ -33,25 +50,3 @@ const COOKIE: string = '';
 // const BACKEND_URL = "https://mipbesta.ddns.net/services"
 // const TRAININGDATASETS = "IRCCSBesta,ppmi,edsd,adni"
 
-const AUTHORIZATION = 'Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex';
-
-const options: any = {
-  headers: {
-    Authorization: AUTHORIZATION,
-    Cookie: COOKIE,
-    'X-XSRF-TOKEN': (COOKIE && COOKIE.match(/XSRF-TOKEN=(.*)/)![1]) || '',
-  },
-};
-
-const baseUrl = BACKEND_URL;
-const username = USERNAME;
-
-
-export default {
-  baseUrl,
-  options,
-  TRAININGDATASETS,
-  username,
-  VALIDATIONDATASETS,
-  MOCK_FILE
-};
