@@ -1,10 +1,10 @@
 const MOCK_FILE = 'review'; // all
 
-const BACKEND_URL = 'http://frontend/services';
+const BACKEND_URL = 'http://frontend/services'; 
 const USERNAME = 'anonymous';
 const TRAININGDATASETS = 'clm,adni,fbf,edsd,lille_chru,ppmi';
 const VALIDATIONDATASETS = '';
-const COOKIE: string = '';
+const COOKIE: string = ''; //  "JSESSIONID=; XSRF-TOKEN=" // To be found in the Cookie from the web session
 
 const options: any = {
   headers: {
@@ -32,7 +32,6 @@ export default {
 // const USERNAME = 'manu';
 // const TRAININGDATASETS = "adni"
 // const VALIDATIONDATASETS = ""
-// const COOKIE = "JSESSIONID=F0D796F3A703E41D4910111CFE994766; XSRF-TOKEN=41c99596-b761-4db3-bf27-7c6486e8f82f"
 
 // const BACKEND_URL = "https://staging.mip.chuv.ch/services"
 // const TRAININGDATASETS = "clm,ppmi,edsd,adni"
