@@ -1,11 +1,11 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import config from './config';
 
-const trainingDatasetsValue = process.env.TRAININGDATASETS;
+
+const trainingDatasetsValue = config.TRAININGDATASETS;
 const trainingDatasets = trainingDatasetsValue
   ? trainingDatasetsValue.split(',')
   : [];
-const validationDatasetsValue = process.env.VALIDATIONDATASETS;
+const validationDatasetsValue = config.VALIDATIONDATASETS;
 const validationDatasets: string[] = validationDatasetsValue
   ? validationDatasetsValue.split(',')
   : [];

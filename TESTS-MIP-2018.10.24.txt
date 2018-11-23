@@ -1,0 +1,8 @@
+BACKEND_URL = "https://mip.humanbrainproject.eu/services"
+
+TRAININGDATASETS = "edsd,adni"
+10 methods on 18 had errors on 167 experiments
+
+
+TRAININGDATASETS = "edsd,adni"
+VALIDATIONDATASETS = "clm"

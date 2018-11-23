@@ -1,12 +1,7 @@
 import ExperimentContainer from '@app/components/API/Experiment';
 import ModelContainer from '@app/components/API/Model';
-
-import {
-  IExperimentResult,
-  IModelResult,
-  INode,
-} from '@app/types';
-import { IExperiment, IModel, IModels } from './mocks';
+import { IExperiment, IModel, IModels } from './types';
+import { IExperimentResult, IModelResult, INode } from '@app/types';
 import { MIME_TYPES } from '@app/constants';
 import tape from 'tape';
 import config from './config';
@@ -26,7 +21,6 @@ const modelTemplate = (slug: string, model: IModel) => ({
     username: 'anonymous',
   },
 });
-
 
 const experimentContainer = new ExperimentContainer(config);
 enum sourceType {
@@ -56,6 +50,10 @@ export default class {
         console.log(`Create ${key}`);
         await modelContainer.create(modelTemplate(key, model));
         result = modelContainer.state.model;
+        const error = modelContainer.state.error
+        if (error) {
+          console.log(error)
+        }
       } else {
         console.log(`Existing: ${key}`);
       }
@@ -179,7 +177,7 @@ export default class {
     return false;
   }
 
-  public updateModel = async (slug: string, model: any) => {
+  private updateModel = async (slug: string, model: any) => {
     const modelContainer = new ModelContainer(config);
     const newModel = { ...modelTemplate(slug, model), slug };
     await modelContainer.update(newModel);
