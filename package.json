@@ -5,6 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "react": "^16.4.2",
+    "tsconfig-paths": "^3.7.0",
     "tslint": "^5.11.0",
     "typescript": "^3.0.3"
   },
@@ -24,5 +25,8 @@
     "tslint-config-airbnb": "^5.11.0",
     "unstated": "^2.1.1",
     "unstated-debug": "^0.3.0"
+  },
+  "scripts": {
+    "start": "ts-node node_modules/tape/bin/tape -r tsconfig-paths/register index.ts model && ts-node node_modules/tape/bin/tape -r tsconfig-paths/register index.ts run"
   }
 }

@@ -9,5 +9,5 @@ RUN npm install tape -g
 RUN npm install ts-node -g
 RUN tsc
 
-CMD [ "ts-node", "node_modules/tape/bin/tape", "index.ts" ]
+CMD [ "ts-node", "node_modules/tape/bin/tape", "-r tsconfig-paths/register", "index.ts" ]
 

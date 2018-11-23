@@ -1,13 +1,13 @@
-import ExperimentContainer from '../portal-frontend/app/v3/src/containers/api/ExperimentContainer';
-import ModelContainer from '../portal-frontend/app/v3/src/containers/api/ModelContainer';
+import ExperimentContainer from '@app/components/API/Experiment';
+import ModelContainer from '@app/components/API/Model';
 
 import {
   IExperimentResult,
   IModelResult,
   INode,
-} from '../portal-frontend/app/v3/src/types';
+} from '@app/types';
 import { IExperiment, IModel, IModels } from './mocks';
-import { MIME_TYPES } from '../portal-frontend/app/v3/src/constants';
+import { MIME_TYPES } from '@app/constants';
 import tape from 'tape';
 import config from './config';
 
