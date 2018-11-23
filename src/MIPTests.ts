@@ -18,7 +18,7 @@ const modelTemplate = (slug: string, model: IModel) => ({
     title: { text: slug },
   },
   createdBy: {
-    username: 'anonymous',
+    username: config.username,
   },
 });
 
@@ -47,7 +47,7 @@ export default class {
       await modelContainer.one(key);
       let result: IModelResult | undefined = modelContainer.state.model;
       if (result === undefined) {
-        console.log(`Create ${key}`);
+        console.log(`Create ${key}, ${JSON.stringify(model, null, 4)}`);
         await modelContainer.create(modelTemplate(key, model));
         result = modelContainer.state.model;
         const error = modelContainer.state.error

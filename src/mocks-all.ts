@@ -1,41 +1,11 @@
 import config from './config';
+import { IModelNames } from './types';
+const { TRAININGDATASETS, VALIDATIONDATASETS } = config;
 
-
-const trainingDatasetsValue = config.TRAININGDATASETS;
-const trainingDatasets = trainingDatasetsValue
-  ? trainingDatasetsValue.split(',')
+const trainingDatasets = TRAININGDATASETS ? TRAININGDATASETS.split(',') : [];
+const validationDatasets: string[] = VALIDATIONDATASETS
+  ? VALIDATIONDATASETS.split(',')
   : [];
-const validationDatasetsValue = config.VALIDATIONDATASETS;
-const validationDatasets: string[] = validationDatasetsValue
-  ? validationDatasetsValue.split(',')
-  : [];
-
-
-interface ICode {
-  code: string;
-}
-
-export interface IModels {
-  [key: string]: IModel;
-}
-
-export interface IModel {
-  coVariables: ICode[];
-  filters: string;
-  groupings: ICode[];
-  testingDatasets: string[];
-  trainingDatasets: string[];
-  validationDatasets: string[];
-  variables: ICode[];
-}
-
-export interface IModelNames {
-  [key: string]: IModel;
-  classification1: IModel;
-  classification2: IModel;
-  regression2: IModel;
-  regression1: IModel;
-}
 
 export const models: IModelNames = {
   classification1: {
@@ -87,19 +57,6 @@ const kfold = {
   ],
 };
 
-export interface IMethod {
-  code: string;
-  parameters: Array<any>;
-}
-
-export interface IExperiment {
-  model: IModel;
-  name: string;
-  status: string;
-  methods: IMethod[];
-  validations: Array<any>;
-  uuid?: string;
-}
 
 export const experiments = [
   {
@@ -127,84 +84,84 @@ export const experiments = [
     status: 'ok',
     validations: [],
   },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'sgdLinearModel',
+  {
+    methods: [
+      {
+        code: 'sgdLinearModel',
 
-  //       parameters: [
-  //         {
-  //           code: 'alpha',
-  //           value: '0.0001',
-  //         },
-  //         {
-  //           code: 'penalty',
-  //           value: 'l2',
-  //         },
-  //         {
-  //           code: 'l1_ratio',
-  //           value: '0.15',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   model: models.regression2,
-  //   name: 'sgdLinearModel',
-  //   status: 'ok',
-  //   validations: [kfold],
-  // },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'naiveBayes',
+        parameters: [
+          {
+            code: 'alpha',
+            value: '0.0001',
+          },
+          {
+            code: 'penalty',
+            value: 'l2',
+          },
+          {
+            code: 'l1_ratio',
+            value: '0.15',
+          },
+        ],
+      },
+    ],
+    model: models.regression2,
+    name: 'sgdLinearModel',
+    status: 'ok',
+    validations: [kfold],
+  },
+  {
+    methods: [
+      {
+        code: 'naiveBayes',
 
-  //       parameters: [
-  //         {
-  //           code: 'alpha',
-  //           value: '1',
-  //         },
-  //         {
-  //           code: 'class_prior',
-  //           value: '',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   model: models.classification1,
-  //   name: 'naiveBayes',
-  //   status: 'ok',
-  //   validations: [kfold],
-  // },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'sgdNeuralNetwork',
+        parameters: [
+          {
+            code: 'alpha',
+            value: '1',
+          },
+          {
+            code: 'class_prior',
+            value: '',
+          },
+        ],
+      },
+    ],
+    model: models.classification1,
+    name: 'naiveBayes',
+    status: 'ok',
+    validations: [kfold],
+  },
+  {
+    methods: [
+      {
+        code: 'sgdNeuralNetwork',
 
-  //       parameters: [
-  //         {
-  //           code: 'hidden_layer_sizes',
-  //           value: '100',
-  //         },
-  //         {
-  //           code: 'activation',
-  //           value: 'relu',
-  //         },
-  //         {
-  //           code: 'alpha',
-  //           value: '0.0001',
-  //         },
-  //         {
-  //           code: 'learning_rate_init',
-  //           value: '0.001',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   model: models.classification1,
-  //   name: 'sgdNeuralNetwork',
-  //   status: 'ok',
-  //   validations: [kfold],
-  // },
+        parameters: [
+          {
+            code: 'hidden_layer_sizes',
+            value: '100',
+          },
+          {
+            code: 'activation',
+            value: 'relu',
+          },
+          {
+            code: 'alpha',
+            value: '0.0001',
+          },
+          {
+            code: 'learning_rate_init',
+            value: '0.001',
+          },
+        ],
+      },
+    ],
+    model: models.classification1,
+    name: 'sgdNeuralNetwork',
+    status: 'ok',
+    validations: [kfold],
+  },
   {
     methods: [
       {
@@ -247,18 +204,18 @@ export const experiments = [
     status: 'ok',
     validations: [kfold],
   },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'anova',
-  //       parameters: [],
-  //     },
-  //   ],
-  //   model: models.regression1,
-  //   name: 'anova',
-  //   status: 'ok',
-  //   validations: [],
-  // },
+  {
+    methods: [
+      {
+        code: 'anova',
+        parameters: [],
+      },
+    ],
+    model: models.regression1,
+    name: 'anova',
+    status: 'ok',
+    validations: [],
+  },
   {
     methods: [
       {
@@ -276,31 +233,31 @@ export const experiments = [
     status: 'ok',
     validations: [kfold],
   },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'correlationHeatmap', // no displayable result, what variables should be used?
-  //       parameters: [],
-  //     },
-  //   ],
-  //   model: models.regression2,
-  //   name: 'correlationHeatmap',
-  //   status: 'ko',
-  //   validations: [],
-  // },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'pca',
-  //       parameters: [],
-  //     },
-  //   ],
-  //   model: models.regression2,
-  //   name: 'pca',
-  //   status: 'ok',
+  {
+    methods: [
+      {
+        code: 'correlationHeatmap', // no displayable result, what variables should be used?
+        parameters: [],
+      },
+    ],
+    model: models.regression2,
+    name: 'correlationHeatmap',
+    status: 'ko',
+    validations: [],
+  },
+  {
+    methods: [
+      {
+        code: 'pca',
+        parameters: [],
+      },
+    ],
+    model: models.regression2,
+    name: 'pca',
+    status: 'ok',
 
-  //   validations: [],
-  // },
+    validations: [],
+  },
   {
     methods: [
       {
@@ -343,22 +300,22 @@ export const experiments = [
     status: 'ko',
     validations: [],
   },
-  // {
-  //   methods: [
-  //     {
-  //       code: 'tSNE',
-  //       parameters: [],
-  //     },
-  //     {
-  //       code: 'linearRegression',
-  //       parameters: [],
-  //     },
-  //   ],
-  //   model: models.regression2,
-  //   name: 'tSNE-linearRegression',
-  //   status: 'ok',
-  //   validations: [],
-  // },
+  {
+    methods: [
+      {
+        code: 'tSNE',
+        parameters: [],
+      },
+      {
+        code: 'linearRegression',
+        parameters: [],
+      },
+    ],
+    model: models.regression2,
+    name: 'tSNE-linearRegression',
+    status: 'ok',
+    validations: [],
+  },
   {
     methods: [
       {
@@ -402,3 +359,5 @@ export const experiments = [
   // { code: "WP_LINEAR_REGRESSION" },
   // { code: "K_MEANS" }
 ];
+
+export default { models, experiments}

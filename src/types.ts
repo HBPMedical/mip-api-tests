@@ -1,4 +1,4 @@
-interface ICode {
+export interface ICode {
   code: string;
 }
 
@@ -29,3 +29,23 @@ export interface IExperiment {
   validations: Array<any>;
   uuid?: string;
 }
+
+
+export interface IModel {
+  coVariables: ICode[];
+  filters: string;
+  groupings: ICode[];
+  testingDatasets: string[];
+  trainingDatasets: string[];
+  validationDatasets: string[];
+  variables: ICode[];
+}
+
+export interface IModelNames {
+  [key: string]: IModel;
+  classification1: IModel;
+  classification2: IModel;
+  regression2: IModel;
+  regression1: IModel;
+}
+

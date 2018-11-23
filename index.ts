@@ -1,10 +1,20 @@
 import MIPTests from './src/MIPTests';
 import tape from 'tape';
 import config from './src/config';
+import mocksReview from './src/mocks-review-december-2018';
+import mocksAll from './src/mocks-all';
+import { IModelNames, IExperiment } from './src/types';
+
+const mocks: {
+  [index: string]: any
+} = {
+  'all': mocksAll,
+  'review': mocksReview,
+}
+const getMocks = (name: string) : { experiments: IExperiment[], models: IModelNames} => mocks[name]
+const { experiments, models } = getMocks(config.MOCK_FILE);
 
 const argv = process.argv.join(' ');
-const { experiments, models } = config;
-
 console.log('\narguments: model | run | test\n');
 
 tape(`Running tests on ${config.baseUrl}\n`, (t: tape.Test) => {
