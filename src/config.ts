@@ -1,4 +1,8 @@
-const MOCK_FILE = 'review'; // all
+
+// mocksAll,
+// mocksReviewDecember2018,
+// mocksReviewMay2018,
+const MOCK_FILE = 'mocksReviewMay2018';   
 
 const BACKEND_URL = 'http://frontend/services'; 
 const USERNAME = 'anonymous';

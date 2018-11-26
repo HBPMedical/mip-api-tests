@@ -43,9 +43,5 @@ export interface IModel {
 
 export interface IModelNames {
   [key: string]: IModel;
-  classification1: IModel;
-  classification2: IModel;
-  regression2: IModel;
-  regression1: IModel;
 }
 

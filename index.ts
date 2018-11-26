@@ -1,17 +1,21 @@
 import MIPTests from './src/MIPTests';
 import tape from 'tape';
 import config from './src/config';
-import mocksReview from './src/mocks-review-december-2018';
+import mocksReviewDecember2018 from './src/mocks-review-december-2018';
 import mocksAll from './src/mocks-all';
+import mocksReviewMay2018 from './src/mocks-review-may-2018';
 import { IModelNames, IExperiment } from './src/types';
 
 const mocks: {
-  [index: string]: any
+  [index: string]: any;
 } = {
-  'all': mocksAll,
-  'review': mocksReview,
-}
-const getMocks = (name: string) : { experiments: IExperiment[], models: IModelNames} => mocks[name]
+  mocksAll,
+  mocksReviewDecember2018,
+  mocksReviewMay2018,
+};
+const getMocks = (
+  name: string,
+): { experiments: IExperiment[]; models: IModelNames } => mocks[name];
 const { experiments, models } = getMocks(config.MOCK_FILE);
 
 const argv = process.argv.join(' ');
