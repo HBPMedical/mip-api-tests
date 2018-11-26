@@ -1,4 +1,4 @@
 [submodule "portal-frontend"]
 	path = portal-frontend
-	url = git@github.com:nicedexter/portal-frontend.git
+	url = git@github.com:HBPMedical/portal-frontend.git
 	branch = react
