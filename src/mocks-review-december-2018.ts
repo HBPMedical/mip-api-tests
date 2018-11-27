@@ -66,17 +66,6 @@ export const models: any = {
   },
 };
 
-// const kfold = {
-//   code: 'kfold',
-//   name: 'validation',
-//   parameters: [
-//     {
-//       code: 'k',
-//       value: '2',
-//     },
-//   ],
-// };
-
 export const experiments = [
   {
     model: models.histogram1,
@@ -93,7 +82,7 @@ export const experiments = [
   },
   {
     model: models.regression1,
-    name: 'linearRegression 1',
+    name: 'local linearRegression on adni',
     status: 'ok',
 
     methods: [
@@ -106,7 +95,7 @@ export const experiments = [
   },
   {
     model: models.regression2,
-    name: 'linearRegression 2',
+    name: 'local linearRegression on clm',
     status: 'ok',
 
     methods: [
@@ -119,7 +108,7 @@ export const experiments = [
   },
   {
     model: models.regression3,
-    name: 'linearRegression 3',
+    name: 'local linearRegression on adni clm fbf',
     status: 'ok',
 
     methods: [
@@ -132,7 +121,7 @@ export const experiments = [
   },
   {
     model: models.regression1,
-    name: 'Exareme linear regression 1',
+    name: 'Exareme linearRegression on adni',
     status: 'ok',
 
     methods: [
@@ -145,7 +134,7 @@ export const experiments = [
   },
   {
     model: models.regression2,
-    name: 'Exareme linear regression 2',
+    name: 'Exareme linearRegression on clm',
     status: 'ok',
 
     methods: [
@@ -158,7 +147,7 @@ export const experiments = [
   },
   {
     model: models.regression3,
-    name: 'Exareme linear regression 3',
+    name: 'Exareme linearRegression  on adni, clm, fbf',
     status: 'ok',
 
     methods: [
@@ -184,7 +173,7 @@ export const experiments = [
   },
   {
     model: models.classification1,
-    name: 'naiveBayes  on adni',
+    name: 'naiveBayes on adni',
     status: 'ok',
 
     methods: [
@@ -197,7 +186,7 @@ export const experiments = [
   },
   {
     model: models.classification2,
-    name: 'knn on several datasets',
+    name: 'knn on adni, clm, fbf',
     status: 'ok',
 
     methods: [
@@ -210,7 +199,7 @@ export const experiments = [
   },
   {
     model: models.classification2,
-    name: 'naiveBayes on several datasets',
+    name: 'naiveBayes on adni, clm, fbf',
     status: 'ok',
 
     methods: [
@@ -221,6 +210,33 @@ export const experiments = [
     ],
     validations: [],
   },
+  {
+    model: models.classification2,
+    name: 'naiveBayes kfold=4  on adni, clm, fbf',
+    status: 'ok',
+
+    methods: [
+      {
+        code: 'naiveBayes',
+        parameters: [
+          { code: 'alpha', value: '1' },
+          { code: 'class_prior', value: '' },
+        ],
+      },
+    ],
+    validations: [
+      {
+        code: 'kfold',
+        name: 'validation',
+        parameters: [
+          {
+            code: 'k',
+            value: '4',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
-export default { models, experiments}
+export default { models, experiments };
